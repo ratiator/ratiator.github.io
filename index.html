@@ -4,1925 +4,1440 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Radiator Clicker</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Source+Code+Pro:wght@300;400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg-dark: #0a0c0f;
-    --bg-panel: #111418;
-    --bg-panel2: #161b21;
-    --bg-panel3: #1c2229;
-    --border: #2a3340;
-    --border-bright: #3d5068;
-    --accent: #e8603a;
-    --accent2: #f0934a;
-    --accent-dim: #7a3020;
-    --heat: #ff6b35;
-    --heat2: #ffa500;
-    --heat3: #ffcc44;
-    --cold: #4a9ebb;
-    --text: #d4c9bc;
-    --text-dim: #7a8a96;
-    --text-bright: #f0e8e0;
-    --text-gold: #d4aa60;
-    --gold: #c9922a;
-    --upgrade-bg: #1a2030;
-    --upgrade-hover: #1f2a3a;
-    --tab-active: #1c2229;
-    --shadow: rgba(0,0,0,0.6);
-    --glow: rgba(232, 96, 58, 0.3);
-    --font-main: 'Oswald', sans-serif;
-    --font-mono: 'Source Code Pro', monospace;
-    --font-flavor: 'Crimson Pro', serif;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f4f0;
+  --bg2: #eceae4;
+  --bg3: #e2e0d8;
+  --white: #ffffff;
+  --border: #d8d5cc;
+  --text: #1a1916;
+  --text2: #6b6860;
+  --text3: #9c9a94;
+  --accent: #e85d26;
+  --accent-light: #fff0ea;
+  --accent-dark: #c04a1a;
+  --green: #2d7a4a;
+  --green-light: #eaf4ee;
+  --gold: #b8860b;
+  --gold-light: #fdf6e3;
+  --rad-white: #f8f8f6;
+  --rad-gray: #c8c6c0;
+  --rad-shadow: rgba(0,0,0,0.08);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.06);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
 
-  body {
-    background: var(--bg-dark);
-    color: var(--text);
-    font-family: var(--font-main);
-    font-weight: 400;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    user-select: none;
-  }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-  /* TOP BAR */
-  #topbar {
-    background: var(--bg-panel);
-    border-bottom: 2px solid var(--accent-dim);
-    padding: 8px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    z-index: 100;
-    flex-shrink: 0;
-  }
-  #topbar h1 {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent2);
-    text-shadow: 0 0 20px var(--glow);
-  }
-  #topbar h1 span { color: var(--heat3); }
-  #version { font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); margin-left: auto; }
-  #save-btn, #reset-btn, #export-btn {
-    background: var(--bg-panel3);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    padding: 4px 12px;
-    font-family: var(--font-main);
-    font-size: 11px;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-  }
-  #save-btn:hover { border-color: var(--accent); color: var(--accent2); }
-  #reset-btn:hover { border-color: #c0392b; color: #e74c3c; }
-  #export-btn:hover { border-color: var(--cold); color: var(--cold); }
+/* ── LAYOUT ── */
+#app {
+  display: grid;
+  grid-template-columns: 320px 1fr 280px;
+  grid-template-rows: 56px 1fr;
+  height: 100vh;
+  gap: 0;
+}
 
-  /* MAIN LAYOUT */
-  #main {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    height: calc(100vh - 48px);
-  }
+/* ── HEADER ── */
+header {
+  grid-column: 1 / -1;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 20px;
+  z-index: 10;
+}
+.logo {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-dot {
+  width: 8px; height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.7; }
+}
+.header-stats {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.h-stat { text-align: right; }
+.h-stat-val { font-size: 14px; font-weight: 600; font-family: 'DM Mono', monospace; color: var(--text); }
+.h-stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
+.header-btns { display: flex; gap: 6px; margin-left: 16px; }
+.hbtn {
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.hbtn:hover { background: var(--bg2); border-color: var(--text3); color: var(--text); }
 
-  /* LEFT PANEL */
-  #left-panel {
-    width: 340px;
-    min-width: 340px;
-    background: var(--bg-panel);
-    border-right: 2px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
+/* ── LEFT PANEL ── */
+#left {
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px;
+  gap: 20px;
+  overflow: hidden;
+}
 
-  #heat-count-area {
-    padding: 16px 16px 12px;
-    border-bottom: 1px solid var(--border);
-    text-align: center;
-  }
-  #heat-count {
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--text-bright);
-    letter-spacing: 1px;
-    line-height: 1.1;
-  }
-  #heat-count span { color: var(--heat2); }
-  #heat-label {
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-  #hps-display {
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-top: 6px;
-    font-family: var(--font-mono);
-  }
-  #hps-display span { color: var(--accent2); }
+#heat-display {
+  text-align: center;
+  width: 100%;
+}
+#heat-num {
+  font-size: 36px;
+  font-weight: 300;
+  font-family: 'DM Mono', monospace;
+  color: var(--text);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+#heat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+#heat-sub {
+  font-size: 12px;
+  color: var(--text2);
+  margin-top: 8px;
+  font-family: 'DM Mono', monospace;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+#heat-sub span { color: var(--accent); font-weight: 500; }
 
-  /* RADIATOR CLICKER */
-  #radiator-area {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    background: radial-gradient(ellipse at center, #1a1008 0%, #0a0c0f 70%);
-    cursor: pointer;
-  }
-  #radiator-area::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 60%, rgba(232,96,58,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
+/* ── RADIATOR CLICK AREA ── */
+#rad-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+  border-radius: var(--radius);
+  background: var(--bg);
+  transition: background 0.2s;
+  user-select: none;
+}
+#rad-area:hover { background: var(--bg2); }
+#rad-area:active { background: var(--bg3); }
 
-  #radiator-wrap {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+/* White radiator SVG */
+#radiator-svg {
+  width: 160px;
+  height: 200px;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.12)) drop-shadow(0 2px 6px rgba(0,0,0,0.08));
+  transition: transform 0.1s ease, filter 0.3s;
+}
+#rad-area:active #radiator-svg {
+  transform: scale(0.97) translateY(2px);
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+}
+#radiator-svg.hot {
+  filter: drop-shadow(0 8px 24px rgba(232,93,38,0.2)) drop-shadow(0 2px 6px rgba(0,0,0,0.08));
+}
 
-  #radiator-svg {
-    width: 180px;
-    height: 220px;
-    filter: drop-shadow(0 0 24px rgba(232,96,58,0.25));
-    transition: transform 0.08s ease, filter 0.2s;
-    cursor: pointer;
-  }
-  #radiator-svg:active { transform: scale(0.96); }
-  #radiator-svg.heated { filter: drop-shadow(0 0 36px rgba(255, 140, 50, 0.6)); }
+#click-hint {
+  position: absolute;
+  bottom: 12px;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.5px;
+}
 
-  #click-power-label {
-    margin-top: 10px;
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 1px;
-    font-family: var(--font-mono);
-  }
-  #click-power-label span { color: var(--heat3); }
+/* Float text */
+.float-text {
+  position: fixed;
+  pointer-events: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent);
+  animation: floatUp 1s ease-out forwards;
+  z-index: 9999;
+  white-space: nowrap;
+}
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-60px) scale(0.8); }
+}
 
-  .float-text {
-    position: fixed;
-    pointer-events: none;
-    font-family: var(--font-main);
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--heat2);
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-    animation: floatUp 1.2s ease-out forwards;
-    z-index: 9999;
-  }
-  @keyframes floatUp {
-    0% { opacity: 1; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-80px) scale(0.7); }
-  }
+/* ── MID PANEL ── */
+#mid {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
 
-  .steam-particle {
-    position: fixed;
-    pointer-events: none;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,160,80,0.9), rgba(255,100,50,0.3));
-    animation: steamPop 0.7s ease-out forwards;
-    z-index: 9998;
-  }
-  @keyframes steamPop {
-    0% { opacity: 1; transform: translate(0,0) scale(1); }
-    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
-  }
+.panel-tabs {
+  display: flex;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  gap: 0;
+  flex-shrink: 0;
+}
+.ptab {
+  padding: 16px 16px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text3);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.3px;
+  position: relative;
+}
+.ptab:hover { color: var(--text); }
+.ptab.active { color: var(--text); border-bottom-color: var(--accent); }
+.ptab .badge {
+  position: absolute;
+  top: 8px; right: 4px;
+  background: var(--accent);
+  color: white;
+  font-size: 9px;
+  min-width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  font-family: 'DM Mono', monospace;
+}
 
-  /* MILESTONES BAR */
-  #milestones-bar {
-    border-top: 1px solid var(--border);
-    padding: 8px 12px;
-    background: var(--bg-panel2);
-    min-height: 42px;
-    overflow: hidden;
-    position: relative;
-  }
-  #milestone-msg {
-    font-size: 11px;
-    color: var(--text-dim);
-    font-family: var(--font-flavor);
-    font-style: italic;
-    line-height: 1.4;
-    transition: opacity 0.4s;
-  }
-  #milestone-msg.flash { color: var(--heat3); }
+#panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+#panel-content::-webkit-scrollbar { width: 4px; }
+#panel-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  /* MIDDLE PANEL */
-  #mid-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: var(--bg-dark);
-  }
+/* ── UPGRADES ── */
+.section-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text3);
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+.section-label:first-child { margin-top: 0; }
 
-  /* TABS */
-  #tabs {
-    display: flex;
-    background: var(--bg-panel);
-    border-bottom: 2px solid var(--border);
-    flex-shrink: 0;
-  }
-  .tab-btn {
-    padding: 10px 20px;
-    font-family: var(--font-main);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-    position: relative;
-  }
-  .tab-btn:hover { color: var(--text); background: var(--bg-panel2); }
-  .tab-btn.active { color: var(--accent2); border-bottom-color: var(--accent); background: var(--tab-active); }
-  .tab-btn .badge {
-    position: absolute;
-    top: 4px; right: 4px;
-    background: var(--accent);
-    color: #fff;
-    font-size: 9px;
-    min-width: 14px;
-    height: 14px;
-    border-radius: 7px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 3px;
-    font-family: var(--font-mono);
-  }
+.upgrade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
+}
 
-  #tab-content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 12px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-bright) var(--bg-dark);
-  }
-  #tab-content::-webkit-scrollbar { width: 6px; }
-  #tab-content::-webkit-scrollbar-track { background: var(--bg-dark); }
-  #tab-content::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+.upgrade-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  position: relative;
+}
+.upgrade-card:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.upgrade-card.affordable { border-color: var(--accent); background: var(--accent-light); }
+.upgrade-card.affordable:hover { box-shadow: 0 4px 16px rgba(232,93,38,0.15); }
+.upgrade-card.bought { opacity: 0.45; cursor: default; }
+.upgrade-card.bought:hover { transform: none; border-color: var(--border); box-shadow: none; }
+.upgrade-card.cant-afford { opacity: 0.6; }
 
-  /* UPGRADES */
-  .upgrade-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding-bottom: 12px;
-  }
-  .upgrade-item {
-    width: 48px;
-    height: 48px;
-    background: var(--upgrade-bg);
-    border: 2px solid var(--border);
-    cursor: pointer;
-    position: relative;
-    transition: all 0.15s;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-  .upgrade-item:hover { border-color: var(--accent); transform: scale(1.08); z-index: 10; }
-  .upgrade-item.affordable { border-color: var(--accent-dim); box-shadow: 0 0 8px rgba(232,96,58,0.2); }
-  .upgrade-item.affordable:hover { border-color: var(--accent2); box-shadow: 0 0 16px var(--glow); }
-  .upgrade-item.bought { opacity: 0.4; cursor: default; border-color: var(--border); }
-  .upgrade-item.bought:hover { transform: none; border-color: var(--border); }
-  .upgrade-item img, .upgrade-item .icon {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-  }
-  .upgrade-section-title {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    padding: 12px 0 6px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 8px;
-  }
-  .upgrade-section-title span { color: var(--accent2); }
+.ug-icon { font-size: 22px; flex-shrink: 0; line-height: 1; margin-top: 1px; }
+.ug-body { flex: 1; min-width: 0; }
+.ug-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.ug-effect { font-size: 11px; color: var(--text2); line-height: 1.4; }
+.ug-cost {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--accent);
+  font-weight: 500;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ug-cost.cant { color: var(--text3); }
+.ug-bought-tag {
+  font-size: 10px;
+  color: var(--green);
+  background: var(--green-light);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 6px;
+  display: inline-block;
+  font-weight: 500;
+}
 
-  /* BUILDINGS */
-  .building-item {
-    display: flex;
-    align-items: center;
-    background: var(--bg-panel2);
-    border: 1px solid var(--border);
-    margin-bottom: 4px;
-    cursor: pointer;
-    transition: all 0.15s;
-    position: relative;
-    overflow: hidden;
-  }
-  .building-item::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--building-color, var(--accent));
-    opacity: 0.6;
-  }
-  .building-item:hover { border-color: var(--accent); background: var(--upgrade-hover); }
-  .building-item.affordable:hover { box-shadow: 0 0 12px var(--glow); }
-  .building-item.cant-afford { opacity: 0.5; }
-  .building-item.cant-afford:hover { border-color: var(--border); box-shadow: none; }
+/* ── ACHIEVEMENTS ── */
+.ach-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+.ach-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.15s;
+}
+.ach-card.earned { border-color: var(--gold); background: var(--gold-light); }
+.ach-card.locked { opacity: 0.4; filter: grayscale(0.5); }
+.ach-icon { font-size: 22px; flex-shrink: 0; }
+.ach-body {}
+.ach-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.ach-desc { font-size: 11px; color: var(--text2); margin-top: 2px; line-height: 1.4; }
 
-  .b-icon {
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    flex-shrink: 0;
-    background: var(--bg-panel3);
-    border-right: 1px solid var(--border);
-  }
-  .b-info { flex: 1; padding: 8px 12px; }
-  .b-name {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--text-bright);
-  }
-  .b-desc {
-    font-size: 11px;
-    color: var(--text-dim);
-    font-family: var(--font-flavor);
-    font-style: italic;
-    margin-top: 2px;
-    line-height: 1.3;
-  }
-  .b-stats {
-    font-size: 10px;
-    color: var(--heat2);
-    font-family: var(--font-mono);
-    margin-top: 3px;
-  }
-  .b-right {
-    padding: 8px 14px;
-    text-align: right;
-    flex-shrink: 0;
-  }
-  .b-cost {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text-gold);
-    white-space: nowrap;
-  }
-  .b-cost.cant-afford-text { color: #a0504a; }
-  .b-owned {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--text-dim);
-    font-family: var(--font-mono);
-    line-height: 1;
-    text-align: right;
-  }
-  .b-owned.has-some { color: var(--accent2); }
+/* ── STATS ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+.stat-card-title {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text3);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 12px;
+}
+.stat-row + .stat-row { border-top: 1px solid var(--bg2); }
+.s-label { color: var(--text2); }
+.s-val { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text); font-weight: 500; }
 
-  /* STATS */
-  .stat-group {
-    background: var(--bg-panel2);
-    border: 1px solid var(--border);
-    margin-bottom: 8px;
-    padding: 12px 16px;
-  }
-  .stat-group-title {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--border);
-  }
-  .stat-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 3px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-  }
-  .stat-row:last-child { border-bottom: none; }
-  .stat-label { font-size: 12px; color: var(--text-dim); }
-  .stat-val { font-size: 12px; color: var(--text-bright); font-family: var(--font-mono); text-align: right; }
+/* ── RIGHT PANEL — BUILDINGS ── */
+#right {
+  background: var(--white);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-  /* ACHIEVEMENTS */
-  .achievement-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding-bottom: 12px;
-  }
-  .achievement-item {
-    width: 48px;
-    height: 48px;
-    background: var(--upgrade-bg);
-    border: 2px solid var(--border);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    transition: all 0.15s;
-    cursor: default;
-  }
-  .achievement-item.earned {
-    border-color: var(--gold);
-    box-shadow: 0 0 8px rgba(201, 146, 42, 0.3);
-  }
-  .achievement-item.locked {
-    filter: grayscale(100%) brightness(0.3);
-  }
+.right-header {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.right-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); }
 
-  /* RIGHT PANEL — BUILDINGS SIDEBAR */
-  #right-panel {
-    width: 300px;
-    min-width: 300px;
-    background: var(--bg-panel);
-    border-left: 2px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  #right-panel-title {
-    background: var(--bg-panel2);
-    border-bottom: 2px solid var(--border);
-    padding: 10px 16px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
-  #buildings-list {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-bright) var(--bg-panel);
-    padding: 4px 0;
-  }
-  #buildings-list::-webkit-scrollbar { width: 4px; }
-  #buildings-list::-webkit-scrollbar-track { background: var(--bg-panel); }
-  #buildings-list::-webkit-scrollbar-thumb { background: var(--border-bright); }
+.bulk-row {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.bulk-btn {
+  flex: 1;
+  padding: 4px 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.3px;
+}
+.bulk-btn:hover { background: var(--bg2); color: var(--text); }
+.bulk-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
 
-  /* TOOLTIPS */
-  #tooltip {
-    position: fixed;
-    background: var(--bg-panel3);
-    border: 1px solid var(--border-bright);
-    padding: 10px 14px;
-    max-width: 280px;
-    pointer-events: none;
-    z-index: 10000;
-    display: none;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.7);
-  }
-  #tooltip.show { display: block; }
-  .tt-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-bright);
-    margin-bottom: 4px;
-    letter-spacing: 0.5px;
-  }
-  .tt-cost {
-    font-size: 12px;
-    color: var(--text-gold);
-    font-family: var(--font-mono);
-    margin-bottom: 6px;
-  }
-  .tt-desc {
-    font-size: 12px;
-    color: var(--text-dim);
-    line-height: 1.5;
-    font-family: var(--font-flavor);
-    font-style: italic;
-  }
-  .tt-effect {
-    font-size: 11px;
-    color: var(--heat2);
-    margin-top: 6px;
-    font-family: var(--font-mono);
-  }
-  .tt-flavor {
-    font-size: 11px;
-    color: var(--text-dim);
-    margin-top: 6px;
-    font-style: italic;
-    font-family: var(--font-flavor);
-    border-top: 1px solid var(--border);
-    padding-top: 6px;
-    opacity: 0.7;
-  }
+#buildings-list {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+#buildings-list::-webkit-scrollbar { width: 3px; }
+#buildings-list::-webkit-scrollbar-thumb { background: var(--border); }
 
-  /* NOTIFICATION */
-  #notifications {
-    position: fixed;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    z-index: 9000;
-    pointer-events: none;
-  }
-  .notif {
-    background: var(--bg-panel3);
-    border: 1px solid var(--border-bright);
-    border-left: 3px solid var(--accent);
-    padding: 10px 20px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-bright);
-    letter-spacing: 0.5px;
-    animation: notifIn 0.3s ease, notifOut 0.3s ease 2.7s forwards;
-    white-space: nowrap;
-    max-width: 400px;
-    text-align: center;
-  }
-  .notif.achievement { border-left-color: var(--gold); }
-  @keyframes notifIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes notifOut { to { opacity: 0; transform: translateY(-10px); } }
+.building-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.12s;
+  border-bottom: 1px solid var(--bg2);
+  gap: 10px;
+  position: relative;
+}
+.building-row:hover { background: var(--bg); }
+.building-row.affordable:hover { background: var(--accent-light); }
+.building-row.locked { opacity: 0.35; pointer-events: none; }
 
-  /* GOLDEN RADIATOR */
-  #golden-radiator {
-    position: fixed;
-    cursor: pointer;
-    z-index: 500;
-    animation: goldenFloat 8s linear;
-    pointer-events: all;
-    display: none;
-    font-size: 42px;
-    filter: drop-shadow(0 0 12px gold);
-    transform-origin: center;
-  }
-  @keyframes goldenFloat {
-    0% { transform: rotate(0deg) scale(1); opacity: 0; }
-    5% { opacity: 1; }
-    50% { transform: rotate(5deg) scale(1.05); }
-    95% { opacity: 1; }
-    100% { transform: rotate(-3deg) scale(0.9); opacity: 0; }
-  }
+.b-icon { font-size: 20px; flex-shrink: 0; width: 28px; text-align: center; }
+.b-info { flex: 1; min-width: 0; }
+.b-name { font-size: 12px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b-hps { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 1px; }
+.b-right { text-align: right; flex-shrink: 0; }
+.b-cost-tag {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--accent);
+  font-weight: 500;
+}
+.b-cost-tag.cant { color: var(--text3); }
+.b-owned-num {
+  font-size: 20px;
+  font-weight: 300;
+  font-family: 'DM Mono', monospace;
+  color: var(--text3);
+  line-height: 1;
+}
+.b-owned-num.has { color: var(--text); font-weight: 500; }
 
-  /* PRESTIGE */
-  #prestige-area {
-    padding: 12px;
-    border-top: 1px solid var(--border);
-    background: var(--bg-panel2);
-  }
-  #prestige-info {
-    font-size: 11px;
-    color: var(--text-dim);
-    margin-bottom: 6px;
-    font-family: var(--font-mono);
-  }
-  #prestige-btn {
-    width: 100%;
-    padding: 8px;
-    background: linear-gradient(135deg, #1a0a20, #2d1040);
-    border: 1px solid #6a3aaa;
-    color: #c07aff;
-    font-family: var(--font-main);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: none;
-  }
-  #prestige-btn:hover { background: linear-gradient(135deg, #220d28, #3d1555); box-shadow: 0 0 16px rgba(160, 80, 255, 0.3); }
-  #prestige-btn.visible { display: block; }
+/* ── GOLDEN RADIATOR ── */
+#golden {
+  position: fixed;
+  cursor: pointer;
+  z-index: 500;
+  display: none;
+  font-size: 36px;
+  animation: goldenBob 6s ease-in-out;
+  filter: drop-shadow(0 0 16px rgba(255, 200, 50, 0.7));
+}
+@keyframes goldenBob {
+  0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+  10% { opacity: 1; transform: scale(1.1) rotate(3deg); }
+  90% { opacity: 1; transform: scale(1) rotate(-2deg); }
+  100% { opacity: 0; transform: scale(0.8) rotate(5deg); }
+}
 
-  /* HEAT BAR */
-  #heat-bar-wrap {
-    height: 4px;
-    background: var(--bg-panel3);
-    position: relative;
-    overflow: hidden;
-  }
-  #heat-bar {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent-dim), var(--heat), var(--heat3));
-    transition: width 0.3s ease;
-    width: 0%;
-  }
+/* ── TOAST ── */
+#toasts {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9000;
+  pointer-events: none;
+}
+.toast {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  box-shadow: var(--shadow-md);
+  animation: toastIn 0.25s ease, toastOut 0.25s ease 2.75s forwards;
+  min-width: 220px;
+  max-width: 320px;
+}
+.toast.gold { border-left-color: var(--gold); }
+.toast.green { border-left-color: var(--green); }
+@keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes toastOut { to { opacity: 0; transform: translateX(20px); } }
 
-  /* SEASON/EVENT indicator */
-  #season-bar {
-    background: var(--bg-panel2);
-    border-bottom: 1px solid var(--border);
-    padding: 4px 12px;
-    font-size: 10px;
-    color: var(--text-dim);
-    font-family: var(--font-mono);
-    display: flex;
-    gap: 16px;
-    flex-shrink: 0;
-  }
-  #season-bar span { color: var(--heat2); }
+/* ── TOOLTIP ── */
+#tooltip {
+  position: fixed;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  max-width: 240px;
+  pointer-events: none;
+  z-index: 10000;
+  display: none;
+  box-shadow: var(--shadow-lg);
+}
+#tooltip.show { display: block; }
+.tt-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.tt-cost { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--accent); margin-bottom: 6px; font-weight: 500; }
+.tt-body { font-size: 11px; color: var(--text2); line-height: 1.5; }
+.tt-effect { font-size: 11px; color: var(--green); margin-top: 6px; font-weight: 500; }
 
-  /* COMBO DISPLAY */
-  #combo-display {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    text-align: right;
-  }
-  #combo-display .combo-val { font-size: 20px; color: var(--heat2); font-weight: 700; display: block; }
+/* ── PRESTIGE ── */
+#prestige-wrap {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+#prestige-btn {
+  width: 100%;
+  padding: 8px;
+  background: linear-gradient(135deg, #f8f0ff, #f0e8ff);
+  border: 1px solid #c8a0ee;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #7030b0;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.2s;
+  display: none;
+}
+#prestige-btn:hover { background: linear-gradient(135deg, #ede0ff, #e4d0ff); box-shadow: 0 2px 12px rgba(140, 60, 220, 0.2); }
+#prestige-btn.show { display: block; }
+#prestige-info { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; margin-bottom: 6px; text-align: center; }
 
-  /* MISC */
-  .section-divider {
-    height: 1px;
-    background: var(--border);
-    margin: 12px 0;
-  }
-
-  .empty-state {
-    color: var(--text-dim);
-    font-size: 12px;
-    font-family: var(--font-flavor);
-    font-style: italic;
-    padding: 16px;
-    text-align: center;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-  }
-  .pulsing { animation: pulse 2s infinite; }
-
-  @keyframes shimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-
-  .news-ticker {
-    background: var(--bg-panel3);
-    border-top: 1px solid var(--border);
-    padding: 4px 12px;
-    font-size: 11px;
-    color: var(--text-dim);
-    font-family: var(--font-flavor);
-    font-style: italic;
-    white-space: nowrap;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-  .news-ticker-inner {
-    display: inline-block;
-    animation: tickerScroll 30s linear infinite;
-  }
-  @keyframes tickerScroll {
-    0% { transform: translateX(100vw); }
-    100% { transform: translateX(-100%); }
-  }
-
-  /* BULK BUY */
-  #bulk-controls {
-    display: flex;
-    gap: 4px;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-panel2);
-    flex-shrink: 0;
-  }
-  .bulk-btn {
-    flex: 1;
-    padding: 4px 0;
-    background: var(--bg-panel3);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-family: var(--font-main);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-transform: uppercase;
-  }
-  .bulk-btn:hover { border-color: var(--accent); color: var(--accent2); }
-  .bulk-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--text-bright); }
+/* ── EMPTY STATE ── */
+.empty { text-align: center; padding: 40px 20px; color: var(--text3); font-size: 13px; line-height: 1.6; }
 
 </style>
 </head>
 <body>
+<div id="app">
 
-<!-- TOP BAR -->
-<div id="topbar">
-  <h1>🔥 RADIATOR <span>CLICKER</span></h1>
-  <div id="version">v1.0.0 | ALPHA HEATING</div>
-  <button id="export-btn" onclick="exportSave()">EXPORT</button>
-  <button id="save-btn" onclick="saveGame()">SAVE</button>
-  <button id="reset-btn" onclick="resetGame()">RESET</button>
-</div>
-
-<!-- MAIN -->
-<div id="main">
-
-  <!-- LEFT PANEL -->
-  <div id="left-panel">
-    <div id="heat-count-area">
-      <div id="heat-count"><span id="heat-num">0</span></div>
-      <div id="heat-label">THERMAL UNITS</div>
-      <div id="hps-display">per second: <span id="hps-num">0</span> | per click: <span id="hpc-num">1</span></div>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="logo-dot"></div>
+      Radiator Clicker
     </div>
-    <div id="heat-bar-wrap"><div id="heat-bar"></div></div>
-
-    <div id="radiator-area">
-      <div id="combo-display">
-        <span class="combo-val" id="combo-val" style="display:none"></span>
-        <span id="combo-label"></span>
+    <div class="header-stats">
+      <div class="h-stat">
+        <div class="h-stat-val" id="h-total">0</div>
+        <div class="h-stat-label">Total Heat</div>
       </div>
-      <div id="radiator-wrap">
-        <!-- SVG Radiator -->
-        <svg id="radiator-svg" viewBox="0 0 180 220" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:#2a1a0a"/>
-              <stop offset="30%" style="stop-color:#8a5a30"/>
-              <stop offset="60%" style="stop-color:#c07840"/>
-              <stop offset="80%" style="stop-color:#7a4820"/>
-              <stop offset="100%" style="stop-color:#3a2010"/>
-            </linearGradient>
-            <linearGradient id="heatGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-              <stop offset="0%" style="stop-color:#ff4400;stop-opacity:0.6"/>
-              <stop offset="100%" style="stop-color:#ffaa00;stop-opacity:0"/>
-            </linearGradient>
-            <linearGradient id="panelGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:#1a1008"/>
-              <stop offset="50%" style="stop-color:#2d1c0a"/>
-              <stop offset="100%" style="stop-color:#1a1008"/>
-            </linearGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
+      <div class="h-stat">
+        <div class="h-stat-val" id="h-hps">0/s</div>
+        <div class="h-stat-label">Heat/sec</div>
+      </div>
+      <div class="h-stat">
+        <div class="h-stat-val" id="h-time">0s</div>
+        <div class="h-stat-label">Time Played</div>
+      </div>
+    </div>
+    <div class="header-btns">
+      <button class="hbtn" onclick="saveGame()">Save</button>
+      <button class="hbtn" onclick="resetGame()">Reset</button>
+    </div>
+  </header>
 
-          <!-- Valve top -->
-          <rect x="78" y="4" width="24" height="8" rx="4" fill="#6a4020" stroke="#8a5530" stroke-width="1"/>
-          <rect x="82" y="8" width="16" height="6" rx="2" fill="#5a3010"/>
-          <circle cx="90" cy="12" r="3" fill="#8a5530" stroke="#aa7040" stroke-width="1"/>
-
-          <!-- Top pipe connector -->
-          <rect x="70" y="12" width="40" height="10" rx="2" fill="url(#metalGrad)" stroke="#aa7040" stroke-width="1"/>
-          <rect x="75" y="14" width="30" height="6" fill="#4a2c10" rx="1"/>
-
-          <!-- Main radiator body -->
-          <g id="rad-sections">
-            <!-- Section columns -->
-            <rect x="10" y="22" width="160" height="176" rx="3" fill="url(#panelGrad)" stroke="#5a3a18" stroke-width="1.5"/>
-
-            <!-- Individual fins (8 fins) -->
-            <!-- Fin 1 -->
-            <rect x="16" y="26" width="17" height="168" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="1"/>
-            <rect x="18" y="30" width="13" height="160" rx="1" fill="#1a0e06"/>
-            <rect x="19" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-            <rect x="26" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-
-            <!-- Fin 2 -->
-            <rect x="36" y="26" width="17" height="168" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="1"/>
-            <rect x="38" y="30" width="13" height="160" rx="1" fill="#1a0e06"/>
-            <rect x="39" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-            <rect x="46" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-
-            <!-- Fin 3 -->
-            <rect x="56" y="26" width="17" height="168" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="1"/>
-            <rect x="58" y="30" width="13" height="160" rx="1" fill="#1a0e06"/>
-            <rect x="59" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-            <rect x="66" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-
-            <!-- Fin 4 -->
-            <rect x="76" y="26" width="17" height="168" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="1"/>
-            <rect x="78" y="30" width="13" height="160" rx="1" fill="#1a0e06"/>
-            <rect x="79" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-            <rect x="86" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-
-            <!-- Fin 5 -->
-            <rect x="96" y="26" width="17" height="168" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="1"/>
-            <rect x="98" y="30" width="13" height="160" rx="1" fill="#1a0e06"/>
-            <rect x="99" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-            <rect x="106" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-
-            <!-- Fin 6 -->
-            <rect x="116" y="26" width="17" height="168" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="1"/>
-            <rect x="118" y="30" width="13" height="160" rx="1" fill="#1a0e06"/>
-            <rect x="119" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-            <rect x="126" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-
-            <!-- Fin 7 -->
-            <rect x="136" y="26" width="17" height="168" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="1"/>
-            <rect x="138" y="30" width="13" height="160" rx="1" fill="#1a0e06"/>
-            <rect x="139" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-            <rect x="146" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-
-            <!-- Fin 8 -->
-            <rect x="147" y="26" width="17" height="168" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="1"/>
-            <rect x="149" y="30" width="13" height="160" rx="1" fill="#1a0e06"/>
-            <rect x="150" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-            <rect x="157" y="32" width="4" height="156" rx="1" fill="#2d1a08"/>
-
-            <!-- Heat glow overlay -->
-            <rect id="heat-glow" x="10" y="22" width="160" height="176" rx="3" fill="url(#heatGrad)" opacity="0.3"/>
-          </g>
-
-          <!-- Horizontal pipes connecting fins -->
-          <rect x="10" y="38" width="160" height="8" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="0.5" opacity="0.8"/>
-          <rect x="10" y="80" width="160" height="8" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="0.5" opacity="0.8"/>
-          <rect x="10" y="122" width="160" height="8" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="0.5" opacity="0.8"/>
-          <rect x="10" y="164" width="160" height="8" rx="2" fill="url(#metalGrad)" stroke="#6a4020" stroke-width="0.5" opacity="0.8"/>
-
-          <!-- Bottom pipe connector -->
-          <rect x="70" y="198" width="40" height="10" rx="2" fill="url(#metalGrad)" stroke="#aa7040" stroke-width="1"/>
-          <rect x="75" y="200" width="30" height="6" fill="#4a2c10" rx="1"/>
-
-          <!-- Feet -->
-          <rect x="20" y="208" width="30" height="8" rx="2" fill="#4a2c10" stroke="#6a3a10" stroke-width="1"/>
-          <rect x="130" y="208" width="30" height="8" rx="2" fill="#4a2c10" stroke="#6a3a10" stroke-width="1"/>
-
-          <!-- Shimmer/heat lines animated -->
-          <g id="heat-lines" opacity="0.4">
-            <line x1="24" y1="50" x2="24" y2="180" stroke="#ff6622" stroke-width="0.5" stroke-dasharray="4,8">
-              <animate attributeName="stroke-dashoffset" values="0;-24" dur="1.2s" repeatCount="indefinite"/>
-            </line>
-            <line x1="44" y1="50" x2="44" y2="180" stroke="#ff8833" stroke-width="0.5" stroke-dasharray="6,10">
-              <animate attributeName="stroke-dashoffset" values="0;-32" dur="1.8s" repeatCount="indefinite"/>
-            </line>
-            <line x1="64" y1="50" x2="64" y2="180" stroke="#ffaa44" stroke-width="0.5" stroke-dasharray="3,12">
-              <animate attributeName="stroke-dashoffset" values="0;-30" dur="2.1s" repeatCount="indefinite"/>
-            </line>
-            <line x1="84" y1="50" x2="84" y2="180" stroke="#ff6622" stroke-width="0.5" stroke-dasharray="5,9">
-              <animate attributeName="stroke-dashoffset" values="0;-28" dur="1.5s" repeatCount="indefinite"/>
-            </line>
-            <line x1="104" y1="50" x2="104" y2="180" stroke="#ff7733" stroke-width="0.5" stroke-dasharray="7,8">
-              <animate attributeName="stroke-dashoffset" values="0;-30" dur="1.9s" repeatCount="indefinite"/>
-            </line>
-            <line x1="124" y1="50" x2="124" y2="180" stroke="#ff9944" stroke-width="0.5" stroke-dasharray="4,11">
-              <animate attributeName="stroke-dashoffset" values="0;-30" dur="2.3s" repeatCount="indefinite"/>
-            </line>
-            <line x1="144" y1="50" x2="144" y2="180" stroke="#ff6622" stroke-width="0.5" stroke-dasharray="6,7">
-              <animate attributeName="stroke-dashoffset" values="0;-26" dur="1.6s" repeatCount="indefinite"/>
-            </line>
-          </g>
-        </svg>
-        <div id="click-power-label">each click: +<span id="click-power-val">1</span> heat</div>
+  <!-- LEFT -->
+  <div id="left">
+    <div id="heat-display">
+      <div id="heat-num">0</div>
+      <div id="heat-label">Thermal Units</div>
+      <div id="heat-sub">
+        <span id="hps-val">0</span>/s &nbsp; <span id="hpc-val">1</span>/click
       </div>
     </div>
 
-    <div id="milestones-bar">
-      <div id="milestone-msg">The radiator hums quietly in the corner.</div>
+    <div id="rad-area" onclick="clickRadiator(event)">
+      <svg id="radiator-svg" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="finGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#e8e6e0"/>
+            <stop offset="35%" stop-color="#f8f8f6"/>
+            <stop offset="65%" stop-color="#f8f8f6"/>
+            <stop offset="100%" stop-color="#d8d6d0"/>
+          </linearGradient>
+          <linearGradient id="pipeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#f0eeea"/>
+            <stop offset="50%" stop-color="#e0dedd"/>
+            <stop offset="100%" stop-color="#d0cec8"/>
+          </linearGradient>
+          <linearGradient id="heatGlow" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#ff6b35" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#ff6b35" stop-opacity="0"/>
+          </linearGradient>
+          <filter id="finShadow" x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.1"/>
+          </filter>
+        </defs>
+
+        <!-- Top header pipe -->
+        <rect x="8" y="10" width="144" height="14" rx="7" fill="url(#pipeGrad)" stroke="#ccc9c0" stroke-width="0.8"/>
+        <rect x="16" y="14" width="128" height="6" rx="3" fill="#e8e6e0"/>
+        <!-- valve -->
+        <circle cx="80" cy="5" r="5" fill="#e0deda" stroke="#c8c5bc" stroke-width="0.8"/>
+        <rect x="77" y="3" width="6" height="14" rx="2" fill="#d8d5cc" stroke="#c0bdb4" stroke-width="0.5"/>
+
+        <!-- Fins — 7 fins -->
+        <g filter="url(#finShadow)">
+          <!-- fin 1 -->
+          <rect x="10" y="24" width="16" height="140" rx="3" fill="url(#finGrad)" stroke="#d0cec8" stroke-width="0.6"/>
+          <rect x="12" y="28" width="12" height="132" rx="2" fill="#f0eeea"/>
+          <line x1="13" y1="32" x2="13" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <line x1="22" y1="32" x2="22" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <!-- fin 2 -->
+          <rect x="32" y="24" width="16" height="140" rx="3" fill="url(#finGrad)" stroke="#d0cec8" stroke-width="0.6"/>
+          <rect x="34" y="28" width="12" height="132" rx="2" fill="#f0eeea"/>
+          <line x1="35" y1="32" x2="35" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <line x1="44" y1="32" x2="44" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <!-- fin 3 -->
+          <rect x="54" y="24" width="16" height="140" rx="3" fill="url(#finGrad)" stroke="#d0cec8" stroke-width="0.6"/>
+          <rect x="56" y="28" width="12" height="132" rx="2" fill="#f0eeea"/>
+          <line x1="57" y1="32" x2="57" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <line x1="66" y1="32" x2="66" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <!-- fin 4 center -->
+          <rect x="72" y="24" width="16" height="140" rx="3" fill="url(#finGrad)" stroke="#d0cec8" stroke-width="0.6"/>
+          <rect x="74" y="28" width="12" height="132" rx="2" fill="#f0eeea"/>
+          <line x1="75" y1="32" x2="75" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <line x1="84" y1="32" x2="84" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <!-- fin 5 -->
+          <rect x="94" y="24" width="16" height="140" rx="3" fill="url(#finGrad)" stroke="#d0cec8" stroke-width="0.6"/>
+          <rect x="96" y="28" width="12" height="132" rx="2" fill="#f0eeea"/>
+          <line x1="97" y1="32" x2="97" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <line x1="106" y1="32" x2="106" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <!-- fin 6 -->
+          <rect x="112" y="24" width="16" height="140" rx="3" fill="url(#finGrad)" stroke="#d0cec8" stroke-width="0.6"/>
+          <rect x="114" y="28" width="12" height="132" rx="2" fill="#f0eeea"/>
+          <line x1="115" y1="32" x2="115" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <line x1="124" y1="32" x2="124" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <!-- fin 7 -->
+          <rect x="134" y="24" width="16" height="140" rx="3" fill="url(#finGrad)" stroke="#d0cec8" stroke-width="0.6"/>
+          <rect x="136" y="28" width="12" height="132" rx="2" fill="#f0eeea"/>
+          <line x1="137" y1="32" x2="137" y2="152" stroke="#e0deda" stroke-width="1"/>
+          <line x1="146" y1="32" x2="146" y2="152" stroke="#e0deda" stroke-width="1"/>
+        </g>
+
+        <!-- Cross pipes -->
+        <rect x="8" y="56" width="144" height="10" rx="4" fill="url(#pipeGrad)" stroke="#ccc9c0" stroke-width="0.6" opacity="0.85"/>
+        <rect x="8" y="100" width="144" height="10" rx="4" fill="url(#pipeGrad)" stroke="#ccc9c0" stroke-width="0.6" opacity="0.85"/>
+        <rect x="8" y="144" width="144" height="10" rx="4" fill="url(#pipeGrad)" stroke="#ccc9c0" stroke-width="0.6" opacity="0.85"/>
+
+        <!-- Bottom header pipe -->
+        <rect x="8" y="164" width="144" height="14" rx="7" fill="url(#pipeGrad)" stroke="#ccc9c0" stroke-width="0.8"/>
+        <rect x="16" y="168" width="128" height="6" rx="3" fill="#e8e6e0"/>
+
+        <!-- Feet -->
+        <rect x="18" y="178" width="26" height="14" rx="3" fill="#d8d5cc" stroke="#c8c5bc" stroke-width="0.6"/>
+        <rect x="22" y="190" width="18" height="6" rx="2" fill="#c8c5bc"/>
+        <rect x="116" y="178" width="26" height="14" rx="3" fill="#d8d5cc" stroke="#c8c5bc" stroke-width="0.6"/>
+        <rect x="120" y="190" width="18" height="6" rx="2" fill="#c8c5bc"/>
+
+        <!-- Heat shimmer (animated) -->
+        <g id="heat-shimmer" opacity="0">
+          <rect x="8" y="24" width="144" height="140" rx="3" fill="url(#heatGlow)"/>
+        </g>
+      </svg>
+      <div id="click-hint">click to generate heat</div>
     </div>
-    <div id="prestige-area">
-      <div id="prestige-info">Prestige level: <span id="prestige-level">0</span> | Bonus: +<span id="prestige-bonus">0</span>%</div>
-      <button id="prestige-btn">✦ ASCEND THE HEAT ✦</button>
-    </div>
-    <div class="news-ticker">
-      <span class="news-ticker-inner" id="ticker-text">★ HEATING UP ★ Thermal engineers baffled by unexplained warmth ★ Local radiator achieves sentience, refuses to cool down ★ Scientists warn: it might be too warm ★ The boiler room calls ★</span>
+
+    <div id="prestige-wrap">
+      <div id="prestige-info">Prestige: <span id="p-level">0</span> · Bonus: +<span id="p-bonus">0</span>%</div>
+      <button id="prestige-btn" onclick="prestige()">✦ Ascend the Heat ✦</button>
     </div>
   </div>
 
-  <!-- MID PANEL -->
-  <div id="mid-panel">
-    <div id="season-bar">
-      Time played: <span id="time-played">0s</span> &nbsp;|&nbsp;
-      Total heat generated: <span id="total-heat">0</span> &nbsp;|&nbsp;
-      Highest HPS: <span id="highest-hps">0</span>
+  <!-- MID -->
+  <div id="mid">
+    <div class="panel-tabs">
+      <button class="ptab active" id="tab-upgrades" onclick="switchTab('upgrades')">
+        Upgrades <span class="badge" id="badge-upg" style="display:none"></span>
+      </button>
+      <button class="ptab" id="tab-achievements" onclick="switchTab('achievements')">
+        Achievements <span class="badge" id="badge-ach" style="display:none"></span>
+      </button>
+      <button class="ptab" id="tab-stats" onclick="switchTab('stats')">Stats</button>
     </div>
-    <div id="tabs">
-      <button class="tab-btn active" onclick="switchTab('upgrades')" id="tab-upgrades">UPGRADES <span class="badge" id="badge-upgrades" style="display:none">0</span></button>
-      <button class="tab-btn" onclick="switchTab('achievements')" id="tab-achievements">ACHIEVEMENTS <span class="badge" id="badge-achievements" style="display:none">0</span></button>
-      <button class="tab-btn" onclick="switchTab('stats')" id="tab-stats">STATS</button>
-      <button class="tab-btn" onclick="switchTab('info')" id="tab-info">INFO</button>
-    </div>
-    <div id="tab-content">
-      <!-- filled by JS -->
-    </div>
+    <div id="panel-content"></div>
   </div>
 
-  <!-- RIGHT PANEL - BUILDINGS -->
-  <div id="right-panel">
-    <div id="right-panel-title">🏗 HEAT INFRASTRUCTURE</div>
-    <div id="bulk-controls">
-      <button class="bulk-btn active" onclick="setBulk(1)" id="bulk-1">×1</button>
-      <button class="bulk-btn" onclick="setBulk(10)" id="bulk-10">×10</button>
-      <button class="bulk-btn" onclick="setBulk(100)" id="bulk-100">×100</button>
-      <button class="bulk-btn" onclick="setBulk(0)" id="bulk-max">MAX</button>
+  <!-- RIGHT -->
+  <div id="right">
+    <div class="right-header">
+      <span class="right-title">Buildings</span>
     </div>
-    <div id="buildings-list">
-      <!-- filled by JS -->
+    <div class="bulk-row">
+      <button class="bulk-btn active" id="b1" onclick="setBulk(1)">×1</button>
+      <button class="bulk-btn" id="b10" onclick="setBulk(10)">×10</button>
+      <button class="bulk-btn" id="b100" onclick="setBulk(100)">×100</button>
+      <button class="bulk-btn" id="bmax" onclick="setBulk(0)">Max</button>
     </div>
+    <div id="buildings-list"></div>
   </div>
 
 </div>
 
-<!-- GOLDEN RADIATOR -->
-<div id="golden-radiator" onclick="clickGoldenRadiator()">🔆</div>
+<!-- GOLDEN -->
+<div id="golden" onclick="clickGolden()">🔆</div>
+
+<!-- TOASTS -->
+<div id="toasts"></div>
 
 <!-- TOOLTIP -->
 <div id="tooltip">
   <div class="tt-name" id="tt-name"></div>
   <div class="tt-cost" id="tt-cost"></div>
-  <div class="tt-desc" id="tt-desc"></div>
+  <div class="tt-body" id="tt-body"></div>
   <div class="tt-effect" id="tt-effect"></div>
-  <div class="tt-flavor" id="tt-flavor"></div>
 </div>
 
-<!-- NOTIFICATIONS -->
-<div id="notifications"></div>
-
 <script>
-// ==================== GAME DATA ====================
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
 
 const BUILDINGS = [
-  {
-    id: 'valve',
-    name: 'Bleed Valve',
-    icon: '🔩',
-    desc: 'A tiny valve that lets a bit of heat escape — just enough to count.',
-    flavor: '"Every whisper of steam is a prayer to warmth."',
-    baseCost: 15,
-    baseHPS: 0.1,
-    color: '#a06030',
-  },
-  {
-    id: 'pipe',
-    name: 'Copper Pipe',
-    icon: '🪈',
-    desc: 'Basic copper plumbing. Conducts heat through the wall.',
-    flavor: '"The pipe predates civilization. The pipe will outlast it."',
-    baseCost: 100,
-    baseHPS: 0.5,
-    color: '#c07040',
-  },
-  {
-    id: 'thermostat',
-    name: 'Smart Thermostat',
-    icon: '🌡️',
-    desc: 'Automated temperature regulation. It knows things.',
-    flavor: '"Set to 22°C and never touched again. It has opinions."',
-    baseCost: 500,
-    baseHPS: 3,
-    color: '#4a9ebb',
-  },
-  {
-    id: 'boiler',
-    name: 'Gas Boiler',
-    icon: '🔥',
-    desc: 'A roaring gas boiler that screams in British.',
-    flavor: '"The pilot light has been burning since 1987. We dare not touch it."',
-    baseCost: 3000,
-    baseHPS: 10,
-    color: '#e86030',
-  },
-  {
-    id: 'basement',
-    name: 'Furnace Room',
-    icon: '🏚️',
-    desc: 'A cavernous basement dedicated entirely to heat production.',
-    flavor: '"No one goes down there. The warmth just... arrives."',
-    baseCost: 15000,
-    baseHPS: 40,
-    color: '#8a3020',
-  },
-  {
-    id: 'district',
-    name: 'District Heating',
-    icon: '🏙️',
-    desc: 'Heat the entire district from a central plant.',
-    flavor: '"They built the whole city around a single radiator. This is that radiator."',
-    baseCost: 100000,
-    baseHPS: 200,
-    color: '#5060aa',
-  },
-  {
-    id: 'geothermal',
-    name: 'Geothermal Tap',
-    icon: '🌋',
-    desc: 'Drill into the Earth\'s mantle. Steal its heat.',
-    flavor: '"The planet said it was fine with this. Probably."',
-    baseCost: 600000,
-    baseHPS: 700,
-    color: '#aa4020',
-  },
-  {
-    id: 'nuclear',
-    name: 'Nuclear Reactor',
-    icon: '⚛️',
-    desc: 'Fission-powered radiator. Technically legal (in this game).',
-    flavor: '"Radiation: nature\'s warmth, just slightly more enthusiastic."',
-    baseCost: 4000000,
-    baseHPS: 3000,
-    color: '#60aa30',
-  },
-  {
-    id: 'solar',
-    name: 'Orbital Solar Array',
-    icon: '🛰️',
-    desc: 'Beam sunlight down from orbit. Heat amplified. Neighbours annoyed.',
-    flavor: '"Local man builds 6-kilometre microwave dish in garden. HOA furious."',
-    baseCost: 25000000,
-    baseHPS: 10000,
-    color: '#ddaa20',
-  },
-  {
-    id: 'dyson',
-    name: 'Dyson Sphere Fragment',
-    icon: '⭐',
-    desc: 'A small shard of a star-encasing megastructure. Still warm.',
-    flavor: '"Only 0.0001% complete. Still the most expensive radiator accessory."',
-    baseCost: 200000000,
-    baseHPS: 50000,
-    color: '#ffcc44',
-  },
-  {
-    id: 'quantum',
-    name: 'Quantum Heat Pump',
-    icon: '🔮',
-    desc: 'Harvests heat from parallel universes where it is always winter.',
-    flavor: '"In another timeline, you never built this. But they still feel cold."',
-    baseCost: 1500000000,
-    baseHPS: 200000,
-    color: '#9060cc',
-  },
-  {
-    id: 'singularity',
-    name: 'Thermal Singularity',
-    icon: '🌀',
-    desc: 'A point of infinite heat density. Handle with oven mitts.',
-    flavor: '"The temperature is undefined. Schrödinger\'s thermostat reads both 0 and ∞."',
-    baseCost: 15000000000,
-    baseHPS: 1000000,
-    color: '#ee4488',
-  },
+  { id:'valve',      name:'Bleed Valve',        icon:'🔩', baseCost:15,         baseHPS:0.1,    desc:'A tiny valve releasing just enough steam to count.', color:'#a07050' },
+  { id:'pipe',       name:'Copper Pipe',         icon:'🪈', baseCost:100,        baseHPS:0.5,    desc:'Basic copper plumbing through the wall.', color:'#c07840' },
+  { id:'thermostat', name:'Smart Thermostat',    icon:'🌡️', baseCost:500,        baseHPS:3,      desc:'Automated temperature control. It has opinions.', color:'#4a90bb' },
+  { id:'boiler',     name:'Gas Boiler',          icon:'🔥', baseCost:3000,       baseHPS:10,     desc:'A roaring gas boiler. Gerald is its name.', color:'#e06030' },
+  { id:'furnace',    name:'Furnace Room',        icon:'🏚️', baseCost:15000,      baseHPS:40,     desc:'A basement devoted entirely to warmth.', color:'#903020' },
+  { id:'district',   name:'District Heating',   icon:'🏙️', baseCost:100000,     baseHPS:200,    desc:'Heat the whole city from one central plant.', color:'#5060aa' },
+  { id:'geothermal', name:'Geothermal Tap',      icon:'🌋', baseCost:600000,     baseHPS:700,    desc:'Drill into the Earth\'s mantle. Steal heat.', color:'#aa4020' },
+  { id:'nuclear',    name:'Nuclear Reactor',     icon:'⚛️', baseCost:4000000,    baseHPS:3000,   desc:'Fission-powered. Technically legal here.', color:'#60aa30' },
+  { id:'solar',      name:'Orbital Solar Array', icon:'🛰️', baseCost:25000000,   baseHPS:10000,  desc:'Beam sunlight down from orbit. Neighbours annoyed.', color:'#ddaa20' },
+  { id:'dyson',      name:'Dyson Fragment',      icon:'⭐', baseCost:200000000,  baseHPS:50000,  desc:'A shard of a star-encasing megastructure.', color:'#ffcc44' },
+  { id:'quantum',    name:'Quantum Heat Pump',   icon:'🔮', baseCost:1500000000, baseHPS:200000, desc:'Harvests heat from parallel universes.', color:'#9060cc' },
 ];
 
 const UPGRADES = [
-  // CLICK UPGRADES
-  { id: 'u_click1', name: 'Thick Gloves', icon: '🧤', type: 'click', cost: 100, req: () => G.totalHeat >= 0, effect: 'Clicking produces twice as much heat.', multiplier: 2, target: 'click', flavor: '"They were your grandfather\'s. They still smell of radiator."', desc: 'Heavy insulated work gloves. Your clicks now transfer more thermal energy.' },
-  { id: 'u_click2', name: 'Asbestos Mittens', icon: '🔥', type: 'click', cost: 500, req: () => G.totalHeat >= 200, effect: 'Clicking produces twice as much heat.', multiplier: 2, target: 'click', flavor: '"Not recommended by health professionals. Extremely effective."', desc: 'Vintage heat-resistant hand protection. Illegal in most countries.' },
-  { id: 'u_click3', name: 'Bionic Arm', icon: '🦾', type: 'click', cost: 5000, req: () => G.totalHeat >= 2000, effect: 'Clicking produces twice as much heat.', multiplier: 2, target: 'click', flavor: '"We can rebuild him. We can make him warmer."', desc: 'A cybernetic enhancement granting industrial-strength tapping power.' },
-  { id: 'u_click4', name: 'Thermal Resonance', icon: '〰️', type: 'click', cost: 50000, req: () => G.totalHeat >= 20000, effect: 'Clicking produces twice as much heat.', multiplier: 2, target: 'click', flavor: '"You and the radiator share a frequency now. That\'s both beautiful and concerning."', desc: 'Your body has synchronized with the radiator\'s thermal frequency.' },
-  { id: 'u_click5', name: 'Kinetic Knuckles', icon: '✊', type: 'click', cost: 500000, req: () => G.totalHeat >= 200000, effect: 'Clicking produces twice as much heat.', multiplier: 2, target: 'click', flavor: '"Each tap is a tiny explosion of concentrated warmth."', desc: 'Experimental kinetic energy converters embedded in your fists.' },
+  // ── Click upgrades
+  { id:'c1', name:'Thick Gloves',        icon:'🧤', cost:100,         type:'click', mult:2,   req:()=>true,                       effect:'Clicks produce ×2 heat.',         desc:'Heavy insulated gloves improve heat transfer per tap.' },
+  { id:'c2', name:'Asbestos Mittens',    icon:'🔥', cost:500,         type:'click', mult:2,   req:()=>G.totalHeat>=200,           effect:'Clicks produce ×2 heat.',         desc:'Vintage. Illegal in most countries. Very warm.' },
+  { id:'c3', name:'Bionic Arm',          icon:'🦾', cost:5000,        type:'click', mult:2,   req:()=>G.totalHeat>=2000,          effect:'Clicks produce ×2 heat.',         desc:'Cybernetic enhancement for maximum tapping power.' },
+  { id:'c4', name:'Thermal Resonance',   icon:'〰️', cost:50000,       type:'click', mult:2,   req:()=>G.totalHeat>=20000,         effect:'Clicks produce ×2 heat.',         desc:'You and the radiator share a frequency now.' },
+  { id:'c5', name:'Kinetic Knuckles',    icon:'✊', cost:500000,      type:'click', mult:2,   req:()=>G.totalHeat>=200000,        effect:'Clicks produce ×2 heat.',         desc:'Experimental kinetic converters in your fists.' },
 
-  // VALVE UPGRADES
-  { id: 'u_valve1', name: 'Teflon Valve', icon: '⚙️', type: 'building', cost: 200, req: () => G.buildings.valve >= 1, effect: 'Bleed Valves are twice as efficient.', multiplier: 2, target: 'valve', flavor: '"Frictionless. Effortless. Warm."', desc: 'Smooth PTFE-coated valves reduce resistance and double heat output.' },
-  { id: 'u_valve2', name: 'Thermostatic Heads', icon: '🎛️', type: 'building', cost: 1500, req: () => G.buildings.valve >= 5, effect: 'Bleed Valves produce 5x more heat.', multiplier: 5, target: 'valve', flavor: '"They turn themselves. Nobody knows why."', desc: 'Self-regulating valve heads that maximize flow in all conditions.' },
-  { id: 'u_valve3', name: 'Pressure Release Protocol', icon: '💨', type: 'building', cost: 10000, req: () => G.buildings.valve >= 25, effect: 'Bleed Valves are twice as efficient.', multiplier: 2, target: 'valve', flavor: '"A controlled release is still a release."', desc: 'Optimal depressurization cycles boost valve thermal yield.' },
+  // ── Valve upgrades
+  { id:'v1', name:'Teflon Valve',        icon:'⚙️', cost:200,         type:'building', target:'valve',      mult:2,  req:()=>G.b.valve>=1,      effect:'Bleed Valves ×2.',     desc:'PTFE coating reduces resistance, doubles output.' },
+  { id:'v2', name:'Thermostatic Heads',  icon:'🎛️', cost:1500,        type:'building', target:'valve',      mult:5,  req:()=>G.b.valve>=5,      effect:'Bleed Valves ×5.',     desc:'Self-regulating heads maximize flow automatically.' },
+  { id:'v3', name:'Pressure Protocol',   icon:'💨', cost:10000,       type:'building', target:'valve',      mult:2,  req:()=>G.b.valve>=25,     effect:'Bleed Valves ×2.',     desc:'Optimal depressurization cycles boost yield.' },
 
-  // PIPE UPGRADES
-  { id: 'u_pipe1', name: 'Lagged Pipes', icon: '🪢', type: 'building', cost: 1500, req: () => G.buildings.pipe >= 1, effect: 'Copper Pipes produce twice as much heat.', multiplier: 2, target: 'pipe', flavor: '"Wrapped in rockwool, loved by plumbers."', desc: 'Foam insulation jackets stop heat escaping into the void.' },
-  { id: 'u_pipe2', name: 'Manifold Header', icon: '🌿', type: 'building', cost: 8000, req: () => G.buildings.pipe >= 5, effect: 'Copper Pipes produce 5x more heat.', multiplier: 5, target: 'pipe', flavor: '"Flow balanced. Heat maximized. Bill catastrophic."', desc: 'A central manifold that evenly distributes flow across all pipes.' },
-  { id: 'u_pipe3', name: 'Superconductive Alloy', icon: '💫', type: 'building', cost: 50000, req: () => G.buildings.pipe >= 25, effect: 'Copper Pipes produce twice as much heat.', multiplier: 2, target: 'pipe', flavor: '"Not technically real. Works anyway."', desc: 'Fictional but extremely effective pipe material. Science is taking notes.' },
+  // ── Pipe upgrades
+  { id:'p1', name:'Lagged Pipes',        icon:'🪢', cost:1500,        type:'building', target:'pipe',       mult:2,  req:()=>G.b.pipe>=1,       effect:'Copper Pipes ×2.',     desc:'Foam insulation stops heat escaping.' },
+  { id:'p2', name:'Manifold Header',     icon:'🌿', cost:8000,        type:'building', target:'pipe',       mult:5,  req:()=>G.b.pipe>=5,       effect:'Copper Pipes ×5.',     desc:'Central manifold evenly distributes flow.' },
+  { id:'p3', name:'Superconductive',     icon:'💫', cost:50000,       type:'building', target:'pipe',       mult:2,  req:()=>G.b.pipe>=25,      effect:'Copper Pipes ×2.',     desc:'Fictional but effective alloy. Physics is noting this.' },
 
-  // THERMOSTAT UPGRADES
-  { id: 'u_therm1', name: 'AI Thermostat', icon: '🤖', type: 'building', cost: 8000, req: () => G.buildings.thermostat >= 1, effect: 'Smart Thermostats produce twice as much heat.', multiplier: 2, target: 'thermostat', flavor: '"It learned your schedule. It judges your schedule."', desc: 'Machine learning optimizes temperature profiles for maximum output.' },
-  { id: 'u_therm2', name: 'Predictive Heating', icon: '🔮', type: 'building', cost: 40000, req: () => G.buildings.thermostat >= 5, effect: 'Smart Thermostats produce 5x more heat.', multiplier: 5, target: 'thermostat', flavor: '"It starts heating before you even know you\'re cold."', desc: 'Precognitive algorithms (patent pending) pre-warm rooms before occupancy.' },
-  { id: 'u_therm3', name: 'Consciousness Upload', icon: '🧠', type: 'building', cost: 250000, req: () => G.buildings.thermostat >= 25, effect: 'Smart Thermostats produce twice as much heat.', multiplier: 2, target: 'thermostat', flavor: '"The thermostat achieved enlightenment. Still won\'t go below 24°C."', desc: 'Uploading human consciousness into the thermostat creates infinite desire for warmth.' },
+  // ── Thermostat upgrades
+  { id:'t1', name:'AI Thermostat',       icon:'🤖', cost:8000,        type:'building', target:'thermostat', mult:2,  req:()=>G.b.thermostat>=1, effect:'Thermostats ×2.',      desc:'Machine learning optimizes temperature profiles.' },
+  { id:'t2', name:'Predictive Heating',  icon:'🔮', cost:40000,       type:'building', target:'thermostat', mult:5,  req:()=>G.b.thermostat>=5, effect:'Thermostats ×5.',      desc:'Pre-warms rooms before you know you\'re cold.' },
 
-  // BOILER UPGRADES
-  { id: 'u_boil1', name: 'Annual Service', icon: '🔧', type: 'building', cost: 50000, req: () => G.buildings.boiler >= 1, effect: 'Gas Boilers produce twice as much heat.', multiplier: 2, target: 'boiler', flavor: '"The engineer arrived in June and was never seen again."', desc: 'A full descale and tune-up restores peak boiler performance.' },
-  { id: 'u_boil2', name: 'Combi Conversion', icon: '🔄', type: 'building', cost: 250000, req: () => G.buildings.boiler >= 5, effect: 'Gas Boilers produce 5x more heat.', multiplier: 5, target: 'boiler', flavor: '"Combi: from the Latin, meaning \'more expensive, somehow worse\'. But hotter."', desc: 'Combi boiler tech eliminates tanks, routing all energy to radiators.' },
-  { id: 'u_boil3', name: 'Supersonic Combustion', icon: '🌪️', type: 'building', cost: 1500000, req: () => G.buildings.boiler >= 25, effect: 'Gas Boilers produce twice as much heat.', multiplier: 2, target: 'boiler', flavor: '"The neighbours called the fire brigade. We explained. They also got cold."', desc: 'Scramjet-inspired combustion technology in residential boiler form.' },
+  // ── Boiler upgrades
+  { id:'b1', name:'Annual Service',      icon:'🔧', cost:50000,       type:'building', target:'boiler',     mult:2,  req:()=>G.b.boiler>=1,     effect:'Boilers ×2.',          desc:'Full descale restores peak performance.' },
+  { id:'b2', name:'Combi Conversion',    icon:'🔄', cost:250000,      type:'building', target:'boiler',     mult:5,  req:()=>G.b.boiler>=5,     effect:'Boilers ×5.',          desc:'Eliminates tanks, routes all energy to radiators.' },
 
-  // MISC BUILDING UPGRADES
-  { id: 'u_furnace1', name: 'Coke Fuel', icon: '⬛', type: 'building', cost: 250000, req: () => G.buildings.basement >= 1, effect: 'Furnace Rooms produce twice as much heat.', multiplier: 2, target: 'basement', flavor: '"Industrial coke. Not the drink. We checked."', desc: 'Carbon-dense industrial coke triples furnace temperatures.' },
-  { id: 'u_district1', name: 'Smart Grid', icon: '🕸️', type: 'building', cost: 1600000, req: () => G.buildings.district >= 1, effect: 'District Heating produces twice as much heat.', multiplier: 2, target: 'district', flavor: '"Every socket, every pipe, every decision — networked. Warm. Watching."', desc: 'A city-wide thermal smart grid optimizes heat distribution.' },
-  { id: 'u_geo1', name: 'Deep Bore', icon: '⛏️', type: 'building', cost: 10000000, req: () => G.buildings.geothermal >= 1, effect: 'Geothermal Taps produce twice as much heat.', multiplier: 2, target: 'geothermal', flavor: '"Ten kilometres down. Still going."', desc: 'Extended drilling depth accesses superheated mantle rock.' },
-  { id: 'u_nuke1', name: 'Breeder Reactor', icon: '☢️', type: 'building', cost: 65000000, req: () => G.buildings.nuclear >= 1, effect: 'Nuclear Reactors produce twice as much heat.', multiplier: 2, target: 'nuclear', flavor: '"Creates more fuel than it consumes. The bankers are furious."', desc: 'Fast neutron breeder reactors generate fuel while running.' },
-  { id: 'u_solar1', name: 'Phased Array', icon: '📡', type: 'building', cost: 400000000, req: () => G.buildings.solar >= 1, effect: 'Orbital Solar Arrays produce twice as much heat.', multiplier: 2, target: 'solar', flavor: '"Legally not a weapon. The treaty was very specific."', desc: 'Synchronized phased antenna arrays focus collected solar energy.' },
-  { id: 'u_dyson1', name: 'Swarm Intelligence', icon: '🐝', type: 'building', cost: 3000000000, req: () => G.buildings.dyson >= 1, effect: 'Dyson Sphere Fragments produce twice as much heat.', multiplier: 2, target: 'dyson', flavor: '"Ten billion autonomous nanobots, unified by a single purpose: warmth."', desc: 'Nanotechnology self-assembles Dyson sphere panels autonomously.' },
-  { id: 'u_quantum1', name: 'Entanglement Web', icon: '🕳️', type: 'building', cost: 20000000000, req: () => G.buildings.quantum >= 1, effect: 'Quantum Heat Pumps produce twice as much heat.', multiplier: 2, target: 'quantum', flavor: '"The heat is simultaneously everywhere and nowhere. Mostly your house."', desc: 'Quantum entanglement routes heat instantaneously across spacetime.' },
+  // ── Furnace upgrades
+  { id:'f1', name:'Coke Fuel',           icon:'⬛', cost:250000,      type:'building', target:'furnace',    mult:2,  req:()=>G.b.furnace>=1,    effect:'Furnace Rooms ×2.',    desc:'Carbon-dense industrial coke tripling temperatures.' },
+  { id:'f2', name:'Forced Draft',        icon:'🌬️', cost:1500000,     type:'building', target:'furnace',    mult:5,  req:()=>G.b.furnace>=5,    effect:'Furnace Rooms ×5.',    desc:'Powered air feed maximizes combustion rate.' },
 
-  // GLOBAL MULTIPLIERS
-  { id: 'u_global1', name: 'Radiator Painting', icon: '🖌️', type: 'global', cost: 1000000, req: () => G.totalHeat >= 500000, effect: 'All heat production ×1.5.', multiplier: 1.5, target: 'all', flavor: '"Painted it matte black. Emissivity: maximum. Aesthetics: concerning."', desc: 'Specialist heat-emitting paint increases radiator efficiency by 50%.' },
-  { id: 'u_global2', name: 'Thermal Mass', icon: '🧱', type: 'global', cost: 10000000, req: () => G.totalHeat >= 5000000, effect: 'All heat production ×1.5.', multiplier: 1.5, target: 'all', flavor: '"Stone floors. Thick walls. Heat that remembers you."', desc: 'Strategic thermal mass storage buffers and amplifies all heat sources.' },
-  { id: 'u_global3', name: 'Heat Recuperation', icon: '♻️', type: 'global', cost: 100000000, req: () => G.totalHeat >= 50000000, effect: 'All heat production ×2.', multiplier: 2, target: 'all', flavor: '"Nothing is lost. Even entropy bows to the system."', desc: 'Whole-system heat recovery captures and recycles waste thermal energy.' },
-  { id: 'u_global4', name: 'Thermodynamic Transcendence', icon: '✨', type: 'global', cost: 1000000000, req: () => G.totalHeat >= 500000000, effect: 'All heat production ×3.', multiplier: 3, target: 'all', flavor: '"The laws of thermodynamics have filed a complaint. You are winning."', desc: 'Your heating network has become so efficient, physics is impressed.' },
+  // ── District upgrades
+  { id:'d1', name:'Smart Grid',          icon:'🕸️', cost:1600000,     type:'building', target:'district',   mult:2,  req:()=>G.b.district>=1,   effect:'District Heating ×2.', desc:'City-wide thermal smart grid optimizes distribution.' },
+  { id:'d2', name:'Underground Mains',   icon:'🚇', cost:10000000,    type:'building', target:'district',   mult:5,  req:()=>G.b.district>=5,   effect:'District Heating ×5.', desc:'Insulated underground mains slash heat loss.' },
+
+  // ── Geothermal upgrades
+  { id:'g1', name:'Deep Bore',           icon:'⛏️', cost:10000000,    type:'building', target:'geothermal', mult:2,  req:()=>G.b.geothermal>=1, effect:'Geothermal Taps ×2.',  desc:'Extended drilling accesses superheated mantle.' },
+
+  // ── Nuclear upgrades
+  { id:'n1', name:'Breeder Reactor',     icon:'☢️', cost:65000000,    type:'building', target:'nuclear',    mult:2,  req:()=>G.b.nuclear>=1,    effect:'Nuclear Reactors ×2.', desc:'Creates fuel while running. Economists furious.' },
+
+  // ── Global upgrades
+  { id:'g_1', name:'Matte Black Paint',  icon:'🖌️', cost:1000000,    type:'global', mult:1.5, req:()=>G.totalHeat>=500000,    effect:'All production ×1.5.', desc:'Heat-emitting paint increases emissivity significantly.' },
+  { id:'g_2', name:'Thermal Mass',       icon:'🧱', cost:10000000,   type:'global', mult:1.5, req:()=>G.totalHeat>=5000000,   effect:'All production ×1.5.', desc:'Strategic thermal mass amplifies all heat sources.' },
+  { id:'g_3', name:'Heat Recuperation',  icon:'♻️', cost:100000000,  type:'global', mult:2,   req:()=>G.totalHeat>=50000000,  effect:'All production ×2.',   desc:'Whole-system heat recovery captures waste energy.' },
+  { id:'g_4', name:'Transcendence',      icon:'✨', cost:1000000000, type:'global', mult:3,   req:()=>G.totalHeat>=500000000, effect:'All production ×3.',   desc:'Your network has become so efficient, physics is impressed.' },
 ];
 
 const ACHIEVEMENTS = [
-  { id: 'ach_1', name: 'First Warmth', icon: '🌡️', desc: 'Generate your first thermal unit.', req: () => G.totalHeat >= 1 },
-  { id: 'ach_2', name: 'Slightly Toasty', icon: '🍞', desc: 'Generate 100 thermal units.', req: () => G.totalHeat >= 100 },
-  { id: 'ach_3', name: 'Radiator Whisperer', icon: '👂', desc: 'Generate 1,000 thermal units.', req: () => G.totalHeat >= 1000 },
-  { id: 'ach_4', name: 'Pipe Dream', icon: '💭', desc: 'Generate 10,000 thermal units.', req: () => G.totalHeat >= 10000 },
-  { id: 'ach_5', name: 'Central Heating', icon: '🏠', desc: 'Generate 100,000 thermal units.', req: () => G.totalHeat >= 100000 },
-  { id: 'ach_6', name: 'Boiler Room Boss', icon: '👑', desc: 'Generate 1 million thermal units.', req: () => G.totalHeat >= 1000000 },
-  { id: 'ach_7', name: 'District Heating Deity', icon: '🏙️', desc: 'Generate 1 billion thermal units.', req: () => G.totalHeat >= 1000000000 },
-  { id: 'ach_8', name: 'Stellar Furnace', icon: '☀️', desc: 'Generate 1 trillion thermal units.', req: () => G.totalHeat >= 1000000000000 },
-
-  { id: 'ach_click1', name: 'Tap Tap Tap', icon: '👆', desc: 'Click the radiator 50 times.', req: () => G.totalClicks >= 50 },
-  { id: 'ach_click2', name: 'Enthusiastic Clicker', icon: '💥', desc: 'Click the radiator 500 times.', req: () => G.totalClicks >= 500 },
-  { id: 'ach_click3', name: 'Obsessive', icon: '🫀', desc: 'Click the radiator 5,000 times.', req: () => G.totalClicks >= 5000 },
-  { id: 'ach_click4', name: 'Carpal Tunnel', icon: '🩼', desc: 'Click the radiator 50,000 times.', req: () => G.totalClicks >= 50000 },
-
-  { id: 'ach_bld1', name: 'First Installation', icon: '🔩', desc: 'Purchase your first building.', req: () => totalBuildings() >= 1 },
-  { id: 'ach_bld2', name: 'Small Portfolio', icon: '📋', desc: 'Own 10 buildings.', req: () => totalBuildings() >= 10 },
-  { id: 'ach_bld3', name: 'Property Developer', icon: '🏗️', desc: 'Own 50 buildings.', req: () => totalBuildings() >= 50 },
-  { id: 'ach_bld4', name: 'Heat Empire', icon: '🏰', desc: 'Own 100 buildings.', req: () => totalBuildings() >= 100 },
-  { id: 'ach_bld5', name: 'Infrastructure King', icon: '👷', desc: 'Own 200 buildings.', req: () => totalBuildings() >= 200 },
-
-  { id: 'ach_hps1', name: 'Warm Trickle', icon: '💧', desc: 'Reach 1 heat per second.', req: () => G.highestHPS >= 1 },
-  { id: 'ach_hps2', name: 'Decent Warmth', icon: '🌊', desc: 'Reach 100 heat per second.', req: () => G.highestHPS >= 100 },
-  { id: 'ach_hps3', name: 'Thermal Torrent', icon: '🌪️', desc: 'Reach 1,000 heat per second.', req: () => G.highestHPS >= 1000 },
-  { id: 'ach_hps4', name: 'Industrial Output', icon: '🏭', desc: 'Reach 10,000 heat per second.', req: () => G.highestHPS >= 10000 },
-  { id: 'ach_hps5', name: 'Planetary Warming', icon: '🌍', desc: 'Reach 1,000,000 heat per second.', req: () => G.highestHPS >= 1000000 },
-
-  { id: 'ach_golden1', name: 'Golden Glow', icon: '✨', desc: 'Click your first Golden Radiator.', req: () => G.goldenClicks >= 1 },
-  { id: 'ach_golden2', name: 'Heat Seeker', icon: '🏆', desc: 'Click 10 Golden Radiators.', req: () => G.goldenClicks >= 10 },
-
-  { id: 'ach_upg1', name: 'Upgrade Complete', icon: '⬆️', desc: 'Purchase your first upgrade.', req: () => G.upgradesBought >= 1 },
-  { id: 'ach_upg2', name: 'R&D Department', icon: '🔬', desc: 'Purchase 10 upgrades.', req: () => G.upgradesBought >= 10 },
-  { id: 'ach_upg3', name: 'Tech Tree Climber', icon: '🌳', desc: 'Purchase 25 upgrades.', req: () => G.upgradesBought >= 25 },
-
-  { id: 'ach_prestige1', name: 'Born Again Warm', icon: '♦️', desc: 'Prestige for the first time.', req: () => G.prestigeLevel >= 1 },
-  { id: 'ach_prestige2', name: 'Thermal Phoenix', icon: '🦅', desc: 'Prestige 5 times.', req: () => G.prestigeLevel >= 5 },
+  { id:'a1',  icon:'🌡️', name:'First Warmth',       desc:'Generate 1 thermal unit.',        req:()=>G.totalHeat>=1 },
+  { id:'a2',  icon:'🍞', name:'Slightly Toasty',     desc:'Generate 100 thermal units.',     req:()=>G.totalHeat>=100 },
+  { id:'a3',  icon:'🏠', name:'Warm House',          desc:'Generate 1,000 thermal units.',   req:()=>G.totalHeat>=1000 },
+  { id:'a4',  icon:'🏙️', name:'Warm City',           desc:'Generate 100,000 thermal units.', req:()=>G.totalHeat>=100000 },
+  { id:'a5',  icon:'👑', name:'Boiler Room Boss',     desc:'Generate 1 million heat.',        req:()=>G.totalHeat>=1e6 },
+  { id:'a6',  icon:'☀️', name:'Stellar Furnace',      desc:'Generate 1 billion heat.',        req:()=>G.totalHeat>=1e9 },
+  { id:'a7',  icon:'🌌', name:'Heat of the Universe', desc:'Generate 1 trillion heat.',       req:()=>G.totalHeat>=1e12 },
+  { id:'a8',  icon:'👆', name:'First Tap',            desc:'Click the radiator.',             req:()=>G.clicks>=1 },
+  { id:'a9',  icon:'💥', name:'100 Clicks',           desc:'Click 100 times.',                req:()=>G.clicks>=100 },
+  { id:'a10', icon:'🫀', name:'Obsessive',            desc:'Click 1,000 times.',              req:()=>G.clicks>=1000 },
+  { id:'a11', icon:'🏗️', name:'First Building',       desc:'Buy your first building.',        req:()=>totalB()>=1 },
+  { id:'a12', icon:'🏰', name:'Heat Empire',          desc:'Own 50 buildings.',               req:()=>totalB()>=50 },
+  { id:'a13', icon:'👷', name:'Infrastructure King',  desc:'Own 100 buildings.',              req:()=>totalB()>=100 },
+  { id:'a14', icon:'⬆️', name:'First Upgrade',        desc:'Buy your first upgrade.',         req:()=>G.upgradesBought>=1 },
+  { id:'a15', icon:'🔬', name:'R&D Dept',             desc:'Buy 10 upgrades.',                req:()=>G.upgradesBought>=10 },
+  { id:'a16', icon:'✨', name:'Golden Radiator',       desc:'Click a Golden Radiator.',        req:()=>G.goldenClicks>=1 },
+  { id:'a17', icon:'♦️', name:'Ascended',             desc:'Prestige once.',                  req:()=>G.prestige>=1 },
 ];
 
-const NEWS_LINES = [
-  "★ Local radiator achieves consciousness, demands thermostat control ★",
-  "★ Scientists confirm: clicking radiators does in fact generate heat ★",
-  "★ Neighbourhood heating wars escalate as resident reaches geothermal tier ★",
-  "★ City council puzzled by unexplained warmth emanating from one specific house ★",
-  "★ Plumber retires after installing 47 boilers in one afternoon ★",
-  "★ Heat economists declare: this is unprecedented ★",
-  "★ Dyson engineers receive unsolicited advice from local clicker enthusiast ★",
-  "★ Thermal unit now recognised as official SI unit ★",
-  "★ The radiator asked if we could just talk. We clicked it instead ★",
-  "★ Energy bill arrives. Resident too hot to read it ★",
-  "★ Orbital array mistaken for second sun. No complaints ★",
-  "★ Quantum heat observed in seven states simultaneously ★",
-  "★ The boiler has a name now. We call it Gerald ★",
-  "★ Scientists warn the thermal singularity may be getting... ideas ★",
-  "★ Local bleed valve wins municipal award for quiet dedication ★",
-  "★ Report: 78% of thermal units generated through sheer stubbornness ★",
-];
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
 
-// ==================== GAME STATE ====================
 let G = {
   heat: 0,
   totalHeat: 0,
-  totalClicks: 0,
+  clicks: 0,
   upgradesBought: 0,
   goldenClicks: 0,
-  prestigeLevel: 0,
-  buildings: { valve:0, pipe:0, thermostat:0, boiler:0, basement:0, district:0, geothermal:0, nuclear:0, solar:0, dyson:0, quantum:0, singularity:0 },
-  boughtUpgrades: [],
-  earnedAchievements: [],
-  highestHPS: 0,
+  prestige: 0,
+  b: { valve:0, pipe:0, thermostat:0, boiler:0, furnace:0, district:0, geothermal:0, nuclear:0, solar:0, dyson:0, quantum:0 },
+  upgrades: [],    // bought upgrade ids
+  achievements: [],
+  highHPS: 0,
   timePlayed: 0,
-  comboClicks: 0,
-  lastClickTime: 0,
-  goldenActive: false,
-  goldenMultiplier: 1,
-  goldenTimer: 0,
   bulkBuy: 1,
+  goldenMult: 1,
+  goldenTimer: 0,
 };
 
 let currentTab = 'upgrades';
-let lastSave = Date.now();
-let newUpgradeCount = 0;
-let newAchievementCount = 0;
+let lastTick = Date.now();
+let goldenCooldown = 0;
 
-// ==================== CALCULATIONS ====================
+// ═══════════════════════════════════════════
+// MATH
+// ═══════════════════════════════════════════
+
 function calcHPS() {
-  let hps = 0;
   let globalMult = 1;
-  let buildingMults = {};
-  BUILDINGS.forEach(b => buildingMults[b.id] = 1);
+  const bMults = {};
+  BUILDINGS.forEach(b => bMults[b.id] = 1);
 
-  G.boughtUpgrades.forEach(uid => {
+  G.upgrades.forEach(uid => {
     const u = UPGRADES.find(x => x.id === uid);
     if (!u) return;
-    if (u.target === 'all') globalMult *= u.multiplier;
-    else if (u.type === 'building') {
-      buildingMults[u.target] = (buildingMults[u.target] || 1) * u.multiplier;
-    }
+    if (u.type === 'global') globalMult *= u.mult;
+    if (u.type === 'building') bMults[u.target] = (bMults[u.target] || 1) * u.mult;
   });
 
+  let hps = 0;
   BUILDINGS.forEach(b => {
-    const count = G.buildings[b.id] || 0;
-    hps += count * b.baseHPS * (buildingMults[b.id] || 1);
+    hps += (G.b[b.id] || 0) * b.baseHPS * bMults[b.id];
   });
 
-  hps *= globalMult;
-  hps *= (1 + G.prestigeLevel * 0.1);
-  return hps;
+  return hps * globalMult * (1 + G.prestige * 0.1);
 }
 
-function calcClickPower() {
+function calcCPC() {
   let cp = 1;
-  G.boughtUpgrades.forEach(uid => {
+  G.upgrades.forEach(uid => {
     const u = UPGRADES.find(x => x.id === uid);
-    if (u && u.type === 'click') cp *= u.multiplier;
+    if (u && u.type === 'click') cp *= u.mult;
   });
-  // 1% of HPS added to click
   cp += calcHPS() * 0.01;
-  cp *= (1 + G.prestigeLevel * 0.05);
+  cp *= (1 + G.prestige * 0.05);
   return Math.max(1, cp);
 }
 
-function calcBuildingCost(building, count = 1, owned = null) {
-  const base = building.baseCost;
-  const have = owned !== null ? owned : (G.buildings[building.id] || 0);
-  let total = 0;
-  for (let i = 0; i < count; i++) {
-    total += Math.ceil(base * Math.pow(1.15, have + i));
-  }
-  return total;
+function buildingCost(b, count, owned) {
+  let t = 0;
+  for (let i = 0; i < count; i++) t += Math.ceil(b.baseCost * Math.pow(1.15, owned + i));
+  return t;
 }
 
-function maxBuyable(building) {
-  let count = 0;
-  let total = 0;
-  const owned = G.buildings[building.id] || 0;
+function maxBuyable(b) {
+  let n = 0, total = 0, owned = G.b[b.id] || 0;
   while (true) {
-    const next = Math.ceil(building.baseCost * Math.pow(1.15, owned + count));
+    const next = Math.ceil(b.baseCost * Math.pow(1.15, owned + n));
     if (total + next > G.heat) break;
     total += next;
-    count++;
-    if (count > 10000) break;
+    n++;
+    if (n > 5000) break;
   }
-  return count;
+  return n;
 }
 
-function totalBuildings() {
-  return Object.values(G.buildings).reduce((a, b) => a + b, 0);
-}
+function totalB() { return Object.values(G.b).reduce((a, x) => a + x, 0); }
 
-function formatNum(n) {
+// ═══════════════════════════════════════════
+// FORMAT
+// ═══════════════════════════════════════════
+
+function fmt(n) {
   if (n < 1000) return Math.floor(n).toLocaleString();
-  const suffixes = ['', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion', 'octillion'];
-  const tier = Math.floor(Math.log10(n) / 3);
-  const suffix = suffixes[Math.min(tier, suffixes.length - 1)];
-  const scaled = n / Math.pow(1000, tier);
-  return scaled.toFixed(3).replace(/\.?0+$/, '') + ' ' + suffix;
+  const suf = ['','k','M','B','T','Qa','Qi','Sx','Sp','Oc'];
+  const t = Math.min(Math.floor(Math.log10(n) / 3), suf.length - 1);
+  const s = n / Math.pow(1000, t);
+  return (s >= 100 ? s.toFixed(1) : s >= 10 ? s.toFixed(2) : s.toFixed(3)).replace(/\.?0+$/, '') + suf[t];
 }
 
-function formatNumShort(n) {
-  if (n < 1000) return Math.floor(n).toString();
-  if (n < 1e6) return (n/1000).toFixed(1) + 'k';
-  if (n < 1e9) return (n/1e6).toFixed(2) + 'M';
-  if (n < 1e12) return (n/1e9).toFixed(2) + 'B';
-  if (n < 1e15) return (n/1e12).toFixed(2) + 'T';
-  if (n < 1e18) return (n/1e15).toFixed(2) + 'Qa';
-  return (n/1e18).toFixed(2) + 'Qi';
+function fmtFull(n) {
+  if (n < 1e6) return Math.floor(n).toLocaleString();
+  return fmt(n);
 }
 
-// ==================== GAME LOOP ====================
-let lastTick = Date.now();
-
-function gameTick() {
-  const now = Date.now();
-  const dt = (now - lastTick) / 1000;
-  lastTick = now;
-
-  const hps = calcHPS();
-  const earn = hps * dt * G.goldenMultiplier;
-  G.heat += earn;
-  G.totalHeat += earn;
-  G.timePlayed += dt;
-  if (hps > G.highestHPS) G.highestHPS = hps;
-
-  // Golden timer
-  if (G.goldenActive) {
-    G.goldenTimer -= dt;
-    if (G.goldenTimer <= 0) {
-      G.goldenActive = false;
-      G.goldenMultiplier = 1;
-      showNotif('Golden Radiator faded...', false);
-    }
-  }
-
-  // Auto-save
-  if (now - lastSave > 30000) {
-    saveGame(true);
-    lastSave = now;
-  }
-
-  updateUI(hps);
-  checkAchievements();
-  spawnGoldenRadiator();
-}
-
-let goldenSpawnTimer = 0;
-function spawnGoldenRadiator() {
-  goldenSpawnTimer += 1/60;
-  const el = document.getElementById('golden-radiator');
-  if (!el.style.display || el.style.display === 'none') {
-    const interval = Math.max(30, 180 - G.goldenClicks * 2);
-    if (goldenSpawnTimer >= interval) {
-      goldenSpawnTimer = 0;
-      const x = 60 + Math.random() * (window.innerWidth - 160);
-      const y = 100 + Math.random() * (window.innerHeight - 200);
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
-      el.style.display = 'block';
-      el.style.animation = 'none';
-      void el.offsetWidth;
-      el.style.animation = 'goldenFloat 8s linear forwards';
-      setTimeout(() => { el.style.display = 'none'; }, 8000);
-    }
-  }
-}
-
-function clickGoldenRadiator() {
-  const el = document.getElementById('golden-radiator');
-  el.style.display = 'none';
-  G.goldenClicks++;
-  const hps = calcHPS();
-  const bonus = Math.max(13, hps * 900);
-  G.heat += bonus;
-  G.totalHeat += bonus;
-  G.goldenActive = true;
-  G.goldenMultiplier = 7;
-  G.goldenTimer = 77;
-  showNotif(`✨ Golden Radiator! +${formatNumShort(bonus)} heat & ×7 for 77s!`, false);
-}
-
-// ==================== UI UPDATE ====================
-function updateUI(hps) {
-  const cp = calcClickPower();
-  document.getElementById('heat-num').textContent = formatNum(G.heat);
-  document.getElementById('hps-num').textContent = formatNumShort(hps);
-  document.getElementById('hpc-num').textContent = formatNumShort(cp);
-  document.getElementById('click-power-val').textContent = formatNumShort(cp);
-
-  const pct = Math.min(100, (G.heat / (G.heat + 1000)) * 100);
-  document.getElementById('heat-bar').style.width = pct + '%';
-
-  const heatEl = document.getElementById('radiator-svg');
-  if (hps > 100) heatEl.classList.add('heated'); else heatEl.classList.remove('heated');
-
-  document.getElementById('time-played').textContent = formatTime(G.timePlayed);
-  document.getElementById('total-heat').textContent = formatNumShort(G.totalHeat);
-  document.getElementById('highest-hps').textContent = formatNumShort(G.highestHPS);
-
-  // Prestige
-  const prestigeThreshold = 1e12;
-  document.getElementById('prestige-level').textContent = G.prestigeLevel;
-  document.getElementById('prestige-bonus').textContent = (G.prestigeLevel * 10);
-  const prestigeBtn = document.getElementById('prestige-btn');
-  if (G.totalHeat >= prestigeThreshold) prestigeBtn.classList.add('visible');
-  else prestigeBtn.classList.remove('visible');
-
-  if (currentTab === 'upgrades') renderUpgrades();
-  if (currentTab === 'stats') renderStats();
-  renderBuildings();
-}
-
-function formatTime(s) {
+function fmtTime(s) {
   s = Math.floor(s);
   if (s < 60) return s + 's';
   if (s < 3600) return Math.floor(s/60) + 'm ' + (s%60) + 's';
   return Math.floor(s/3600) + 'h ' + Math.floor((s%3600)/60) + 'm';
 }
 
-// ==================== CLICK ====================
-document.getElementById('radiator-area').addEventListener('click', function(e) {
-  const cp = calcClickPower();
-  G.heat += cp * G.goldenMultiplier;
-  G.totalHeat += cp * G.goldenMultiplier;
-  G.totalClicks++;
+// ═══════════════════════════════════════════
+// GAME LOOP
+// ═══════════════════════════════════════════
 
-  // Combo
+function tick() {
   const now = Date.now();
-  if (now - G.lastClickTime < 500) {
-    G.comboClicks++;
-  } else {
-    G.comboClicks = 1;
-  }
-  G.lastClickTime = now;
+  const dt = Math.min((now - lastTick) / 1000, 0.5);
+  lastTick = now;
 
-  const comboEl = document.getElementById('combo-val');
-  const comboLabel = document.getElementById('combo-label');
-  if (G.comboClicks >= 5) {
-    comboEl.style.display = 'block';
-    comboEl.textContent = '×' + G.comboClicks;
-    comboLabel.textContent = 'COMBO';
-  } else {
-    comboEl.style.display = 'none';
-    comboLabel.textContent = '';
+  const hps = calcHPS();
+  const earn = hps * dt * G.goldenMult;
+  G.heat += earn;
+  G.totalHeat += earn;
+  G.timePlayed += dt;
+  if (hps > G.highHPS) G.highHPS = hps;
+
+  if (G.goldenMult > 1) {
+    G.goldenTimer -= dt;
+    if (G.goldenTimer <= 0) {
+      G.goldenMult = 1;
+      toast('Golden boost faded.');
+    }
   }
 
-  // Float text
+  goldenCooldown -= dt;
+  if (goldenCooldown <= 0) spawnGolden();
+
+  updateUI(hps);
+  checkAchievements();
+}
+
+setInterval(tick, 1000 / 30);
+setInterval(() => saveGame(true), 30000);
+
+// ═══════════════════════════════════════════
+// CLICK
+// ═══════════════════════════════════════════
+
+function clickRadiator(e) {
+  const cp = calcCPC() * G.goldenMult;
+  G.heat += cp;
+  G.totalHeat += cp;
+  G.clicks++;
+
+  // heat shimmer
+  const shimmer = document.getElementById('heat-shimmer');
+  shimmer.style.opacity = '1';
+  setTimeout(() => shimmer.style.opacity = '0', 300);
+
+  // float text
   const ft = document.createElement('div');
   ft.className = 'float-text';
-  ft.textContent = '+' + formatNumShort(cp * G.goldenMultiplier);
-  ft.style.left = (e.clientX - 20) + 'px';
-  ft.style.top = (e.clientY - 20) + 'px';
+  ft.textContent = '+' + fmt(cp);
+  ft.style.left = (e.clientX - 16) + 'px';
+  ft.style.top = (e.clientY - 10) + 'px';
   document.body.appendChild(ft);
-  setTimeout(() => ft.remove(), 1200);
+  setTimeout(() => ft.remove(), 1000);
+}
 
-  // Particles
-  for (let i = 0; i < 5; i++) {
-    const p = document.createElement('div');
-    p.className = 'steam-particle';
-    const angle = Math.random() * Math.PI * 2;
-    const dist = 20 + Math.random() * 60;
-    p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
-    p.style.setProperty('--dy', Math.sin(angle) * dist - 30 + 'px');
-    p.style.left = e.clientX + 'px';
-    p.style.top = e.clientY + 'px';
-    document.body.appendChild(p);
-    setTimeout(() => p.remove(), 700);
+// ═══════════════════════════════════════════
+// BUILDINGS
+// ═══════════════════════════════════════════
+
+function buyBuilding(b) {
+  let count = G.bulkBuy === 0 ? Math.max(1, maxBuyable(b)) : G.bulkBuy;
+  const owned = G.b[b.id] || 0;
+  const cost = buildingCost(b, count, owned);
+  if (G.heat < cost) {
+    // try ×1
+    if (count === 1) return;
+    const c1 = buildingCost(b, 1, owned);
+    if (G.heat < c1) return;
+    count = 1;
   }
-});
+  const finalCost = buildingCost(b, count, owned);
+  if (G.heat < finalCost) return;
+  G.heat -= finalCost;
+  G.b[b.id] = owned + count;
+  renderBuildings();
+  if (currentTab === 'upgrades') renderTab();
+}
 
-// ==================== BUILDINGS ====================
+function setBulk(n) {
+  G.bulkBuy = n;
+  ['b1','b10','b100','bmax'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById(n === 0 ? 'bmax' : 'b' + n).classList.add('active');
+  renderBuildings();
+}
+
 function renderBuildings() {
   const list = document.getElementById('buildings-list');
-  const hps = calcHPS();
   list.innerHTML = '';
-
   BUILDINGS.forEach(b => {
-    const owned = G.buildings[b.id] || 0;
-    let buyCount = G.bulkBuy === 0 ? maxBuyable(b) : G.bulkBuy;
-    if (buyCount < 1) buyCount = 1;
-    const cost = calcBuildingCost(b, G.bulkBuy === 0 ? Math.max(1, maxBuyable(b)) : G.bulkBuy);
+    const owned = G.b[b.id] || 0;
+    const count = G.bulkBuy === 0 ? Math.max(1, maxBuyable(b)) : G.bulkBuy;
+    const cost = buildingCost(b, count, owned);
     const canAfford = G.heat >= cost;
+
+    const row = document.createElement('div');
+    row.className = 'building-row' + (canAfford ? ' affordable' : '');
+
     const bHPS = calcBuildingHPS(b);
+    const countLabel = G.bulkBuy === 0 ? `×${Math.max(1, maxBuyable(b))}` : (G.bulkBuy > 1 ? `×${G.bulkBuy}` : '');
 
-    const div = document.createElement('div');
-    div.className = 'building-item' + (canAfford ? ' affordable' : ' cant-afford');
-    div.style.setProperty('--building-color', b.color);
-
-    let buyLabel = G.bulkBuy === 0 ? ('×' + Math.max(1, maxBuyable(b))) : (G.bulkBuy > 1 ? '×' + G.bulkBuy : '');
-
-    div.innerHTML = `
+    row.innerHTML = `
       <div class="b-icon">${b.icon}</div>
       <div class="b-info">
         <div class="b-name">${b.name}</div>
-        <div class="b-desc">${b.desc}</div>
-        <div class="b-stats">${owned > 0 ? formatNumShort(bHPS * owned) + ' h/s total' : 'no output yet'}</div>
+        <div class="b-hps">${owned > 0 ? fmt(bHPS * owned) + '/s' : '—'}</div>
       </div>
       <div class="b-right">
-        <div class="b-cost ${canAfford ? '' : 'cant-afford-text'}">🔥 ${formatNumShort(cost)} ${buyLabel}</div>
-        <div class="b-owned ${owned > 0 ? 'has-some' : ''}">${owned}</div>
+        <div class="b-cost-tag ${canAfford ? '' : 'cant'}">${fmt(cost)} ${countLabel}</div>
+        <div class="b-owned-num ${owned > 0 ? 'has' : ''}">${owned}</div>
       </div>
     `;
 
-    div.addEventListener('click', () => buyBuilding(b));
-    div.addEventListener('mouseenter', (e) => showTooltip(e, {
+    row.addEventListener('click', () => buyBuilding(b));
+    row.addEventListener('mouseenter', e => showTT(e, {
       name: b.name,
-      cost: formatNum(cost) + ' heat',
-      desc: b.desc,
-      effect: `Each ${b.name}: ${formatNumShort(bHPS)} h/s | Owned: ${owned} | Total: ${formatNumShort(bHPS * owned)} h/s`,
-      flavor: b.flavor,
+      cost: fmtFull(cost) + ' heat',
+      body: b.desc,
+      effect: owned > 0 ? `Producing ${fmt(bHPS * owned)}/s total (${fmt(bHPS)}/s each)` : `Each produces ${fmt(bHPS)}/s`,
     }));
-    div.addEventListener('mouseleave', hideTooltip);
-    div.addEventListener('mousemove', moveTooltip);
-
-    list.appendChild(div);
+    row.addEventListener('mouseleave', hideTT);
+    row.addEventListener('mousemove', moveTT);
+    list.appendChild(row);
   });
 }
 
 function calcBuildingHPS(b) {
   let mult = 1;
-  G.boughtUpgrades.forEach(uid => {
+  G.upgrades.forEach(uid => {
     const u = UPGRADES.find(x => x.id === uid);
-    if (u && u.target === b.id) mult *= u.multiplier;
-    if (u && u.target === 'all') mult *= u.multiplier;
+    if (!u) return;
+    if (u.type === 'building' && u.target === b.id) mult *= u.mult;
+    if (u.type === 'global') mult *= u.mult;
   });
-  mult *= (1 + G.prestigeLevel * 0.1);
-  return b.baseHPS * mult;
+  return b.baseHPS * mult * (1 + G.prestige * 0.1);
 }
 
-function buyBuilding(b) {
-  let count = G.bulkBuy === 0 ? Math.max(1, maxBuyable(b)) : G.bulkBuy;
-  const cost = calcBuildingCost(b, count);
-  if (G.heat < cost) {
-    // try ×1
-    const cost1 = calcBuildingCost(b, 1);
-    if (G.heat < cost1) return;
-    count = 1;
-  }
-  const finalCost = calcBuildingCost(b, count);
-  if (G.heat < finalCost) return;
-  G.heat -= finalCost;
-  G.buildings[b.id] = (G.buildings[b.id] || 0) + count;
+// ═══════════════════════════════════════════
+// UPGRADES
+// ═══════════════════════════════════════════
+
+function buyUpgrade(u) {
+  if (G.upgrades.includes(u.id)) return;
+  if (G.heat < u.cost) return;
+  G.heat -= u.cost;
+  G.upgrades.push(u.id);
+  G.upgradesBought++;
+  toast('🔧 ' + u.name + ' purchased!');
+  renderTab();
   renderBuildings();
 }
 
-function setBulk(n) {
-  G.bulkBuy = n;
-  document.querySelectorAll('.bulk-btn').forEach(b => b.classList.remove('active'));
-  const map = {1: 'bulk-1', 10: 'bulk-10', 100: 'bulk-100', 0: 'bulk-max'};
-  document.getElementById(map[n]).classList.add('active');
-  renderBuildings();
-}
-
-// ==================== UPGRADES ====================
 function renderUpgrades() {
-  const container = document.getElementById('tab-content');
+  const avail = UPGRADES.filter(u => !G.upgrades.includes(u.id) && u.req());
+  const bought = UPGRADES.filter(u => G.upgrades.includes(u.id));
 
-  const available = UPGRADES.filter(u => !G.boughtUpgrades.includes(u.id) && u.req());
-  const bought = UPGRADES.filter(u => G.boughtUpgrades.includes(u.id));
-
-  const affordableNew = available.filter(u => G.heat >= u.cost).length;
-  const badge = document.getElementById('badge-upgrades');
-  if (affordableNew > 0) {
-    badge.style.display = 'flex';
-    badge.textContent = affordableNew;
-  } else {
-    badge.style.display = 'none';
-  }
+  const affordable = avail.filter(u => G.heat >= u.cost).length;
+  const badge = document.getElementById('badge-upg');
+  if (affordable > 0) { badge.style.display = 'flex'; badge.textContent = affordable; }
+  else badge.style.display = 'none';
 
   let html = '';
-  if (available.length === 0 && bought.length === 0) {
-    html = '<div class="empty-state">No upgrades available yet.<br>Generate more heat to unlock improvements.</div>';
+  if (avail.length === 0 && bought.length === 0) {
+    html = '<div class="empty">Generate more heat to unlock upgrades.</div>';
   } else {
-    if (available.length > 0) {
-      html += '<div class="upgrade-section-title">AVAILABLE UPGRADES <span>' + available.length + '</span></div>';
-      html += '<div class="upgrade-grid" id="avail-grid"></div>';
+    if (avail.length > 0) {
+      html += '<div class="section-label">Available</div><div class="upgrade-grid" id="ug-avail"></div>';
     }
     if (bought.length > 0) {
-      html += '<div class="upgrade-section-title">PURCHASED</div>';
-      html += '<div class="upgrade-grid" id="bought-grid"></div>';
+      html += '<div class="section-label">Purchased</div><div class="upgrade-grid" id="ug-bought"></div>';
     }
   }
 
-  container.innerHTML = html;
+  document.getElementById('panel-content').innerHTML = html;
 
-  if (available.length > 0) {
-    const grid = document.getElementById('avail-grid');
-    available.forEach(u => {
-      const div = document.createElement('div');
+  if (avail.length > 0) {
+    const grid = document.getElementById('ug-avail');
+    avail.forEach(u => {
       const canAfford = G.heat >= u.cost;
-      div.className = 'upgrade-item' + (canAfford ? ' affordable' : '');
-      div.innerHTML = `<div class="icon">${u.icon}</div>`;
-      div.addEventListener('click', () => buyUpgrade(u));
-      div.addEventListener('mouseenter', (e) => showTooltip(e, {
-        name: u.name,
-        cost: formatNum(u.cost) + ' heat',
-        desc: u.desc,
-        effect: u.effect,
-        flavor: u.flavor,
-      }));
-      div.addEventListener('mouseleave', hideTooltip);
-      div.addEventListener('mousemove', moveTooltip);
-      grid.appendChild(div);
+      const card = document.createElement('div');
+      card.className = 'upgrade-card' + (canAfford ? ' affordable' : ' cant-afford');
+      card.innerHTML = `
+        <div class="ug-icon">${u.icon}</div>
+        <div class="ug-body">
+          <div class="ug-name">${u.name}</div>
+          <div class="ug-effect">${u.effect}</div>
+          <div class="ug-cost ${canAfford ? '' : 'cant'}">🔥 ${fmtFull(u.cost)}</div>
+        </div>
+      `;
+      card.addEventListener('click', () => buyUpgrade(u));
+      card.addEventListener('mouseenter', e => showTT(e, { name: u.name, cost: fmtFull(u.cost) + ' heat', body: u.desc, effect: u.effect }));
+      card.addEventListener('mouseleave', hideTT);
+      card.addEventListener('mousemove', moveTT);
+      grid.appendChild(card);
     });
   }
 
   if (bought.length > 0) {
-    const grid = document.getElementById('bought-grid');
+    const grid = document.getElementById('ug-bought');
     bought.forEach(u => {
-      const div = document.createElement('div');
-      div.className = 'upgrade-item bought';
-      div.innerHTML = `<div class="icon">${u.icon}</div>`;
-      div.addEventListener('mouseenter', (e) => showTooltip(e, {
-        name: u.name + ' ✓',
-        cost: 'Purchased',
-        desc: u.desc,
-        effect: u.effect,
-        flavor: u.flavor,
-      }));
-      div.addEventListener('mouseleave', hideTooltip);
-      div.addEventListener('mousemove', moveTooltip);
-      grid.appendChild(div);
+      const card = document.createElement('div');
+      card.className = 'upgrade-card bought';
+      card.innerHTML = `
+        <div class="ug-icon">${u.icon}</div>
+        <div class="ug-body">
+          <div class="ug-name">${u.name}</div>
+          <div class="ug-effect">${u.effect}</div>
+          <div class="ug-bought-tag">✓ Purchased</div>
+        </div>
+      `;
+      card.addEventListener('mouseenter', e => showTT(e, { name: u.name + ' ✓', cost: 'Purchased', body: u.desc, effect: u.effect }));
+      card.addEventListener('mouseleave', hideTT);
+      card.addEventListener('mousemove', moveTT);
+      grid.appendChild(card);
     });
   }
 }
 
-function buyUpgrade(u) {
-  if (G.boughtUpgrades.includes(u.id)) return;
-  if (G.heat < u.cost) return;
-  G.heat -= u.cost;
-  G.boughtUpgrades.push(u.id);
-  G.upgradesBought++;
-  showNotif('🔧 Upgrade: ' + u.name);
-  if (currentTab === 'upgrades') renderUpgrades();
-}
+// ═══════════════════════════════════════════
+// ACHIEVEMENTS
+// ═══════════════════════════════════════════
 
-// ==================== ACHIEVEMENTS ====================
 function checkAchievements() {
-  let newOnes = 0;
   ACHIEVEMENTS.forEach(a => {
-    if (!G.earnedAchievements.includes(a.id) && a.req()) {
-      G.earnedAchievements.push(a.id);
-      showNotif('🏆 Achievement: ' + a.name, true);
-      newOnes++;
-      updateMilestoneMsg(a.name);
+    if (!G.achievements.includes(a.id) && a.req()) {
+      G.achievements.push(a.id);
+      toast('🏆 Achievement: ' + a.name, 'green');
+      if (currentTab === 'achievements') renderTab();
     }
   });
-  if (newOnes > 0 && currentTab === 'achievements') renderAchievements();
-  const pending = ACHIEVEMENTS.filter(a => !G.earnedAchievements.includes(a.id) && a.req()).length;
-  const badge = document.getElementById('badge-achievements');
-  if (pending > 0) { badge.style.display = 'flex'; badge.textContent = pending; }
-  else badge.style.display = 'none';
 }
 
 function renderAchievements() {
-  const container = document.getElementById('tab-content');
-  const earned = G.earnedAchievements.length;
+  const earned = G.achievements.length;
   const total = ACHIEVEMENTS.length;
 
-  let html = `<div class="upgrade-section-title">ACHIEVEMENTS <span>${earned}/${total}</span></div>`;
-  html += '<div class="achievement-grid" id="ach-grid"></div>';
-  container.innerHTML = html;
+  const badge = document.getElementById('badge-ach');
+  badge.style.display = 'none';
 
-  const grid = document.getElementById('ach-grid');
+  let html = `<div class="section-label">${earned} / ${total} Unlocked</div><div class="ach-grid">`;
   ACHIEVEMENTS.forEach(a => {
-    const div = document.createElement('div');
-    const isEarned = G.earnedAchievements.includes(a.id);
-    div.className = 'achievement-item ' + (isEarned ? 'earned' : 'locked');
-    div.textContent = a.icon;
-    div.addEventListener('mouseenter', (e) => showTooltip(e, {
-      name: a.name + (isEarned ? ' ✓' : ' 🔒'),
-      cost: isEarned ? 'Unlocked!' : 'Locked',
-      desc: a.desc,
-      effect: '',
-      flavor: '',
-    }));
-    div.addEventListener('mouseleave', hideTooltip);
-    div.addEventListener('mousemove', moveTooltip);
-    grid.appendChild(div);
+    const isEarned = G.achievements.includes(a.id);
+    html += `
+      <div class="ach-card ${isEarned ? 'earned' : 'locked'}">
+        <div class="ach-icon">${a.icon}</div>
+        <div class="ach-body">
+          <div class="ach-name">${a.name}</div>
+          <div class="ach-desc">${isEarned ? a.desc : '???'}</div>
+        </div>
+      </div>`;
   });
+  html += '</div>';
+  document.getElementById('panel-content').innerHTML = html;
 }
 
-// ==================== STATS ====================
+// ═══════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════
+
 function renderStats() {
   const hps = calcHPS();
-  const cp = calcClickPower();
-  const owned = totalBuildings();
-  const container = document.getElementById('tab-content');
-
-  container.innerHTML = `
-    <div class="stat-group">
-      <div class="stat-group-title">THERMAL PRODUCTION</div>
-      <div class="stat-row"><span class="stat-label">Heat per second</span><span class="stat-val">${formatNum(hps)}</span></div>
-      <div class="stat-row"><span class="stat-label">Heat per click</span><span class="stat-val">${formatNum(cp)}</span></div>
-      <div class="stat-row"><span class="stat-label">Golden multiplier</span><span class="stat-val">×${G.goldenMultiplier} ${G.goldenActive ? '🔆 ' + Math.floor(G.goldenTimer) + 's' : ''}</span></div>
-      <div class="stat-row"><span class="stat-label">Highest HPS ever</span><span class="stat-val">${formatNum(G.highestHPS)}</span></div>
-    </div>
-    <div class="stat-group">
-      <div class="stat-group-title">ALL-TIME TOTALS</div>
-      <div class="stat-row"><span class="stat-label">Total heat generated</span><span class="stat-val">${formatNum(G.totalHeat)}</span></div>
-      <div class="stat-row"><span class="stat-label">Total clicks</span><span class="stat-val">${G.totalClicks.toLocaleString()}</span></div>
-      <div class="stat-row"><span class="stat-label">Upgrades purchased</span><span class="stat-val">${G.upgradesBought}</span></div>
-      <div class="stat-row"><span class="stat-label">Golden radiators clicked</span><span class="stat-val">${G.goldenClicks}</span></div>
-    </div>
-    <div class="stat-group">
-      <div class="stat-group-title">INFRASTRUCTURE</div>
-      ${BUILDINGS.map(b => `<div class="stat-row"><span class="stat-label">${b.icon} ${b.name}</span><span class="stat-val">${G.buildings[b.id] || 0} (${formatNumShort(calcBuildingHPS(b) * (G.buildings[b.id]||0))}/s)</span></div>`).join('')}
-      <div class="stat-row"><span class="stat-label"><strong>TOTAL BUILDINGS</strong></span><span class="stat-val"><strong>${owned}</strong></span></div>
-    </div>
-    <div class="stat-group">
-      <div class="stat-group-title">PROGRESS</div>
-      <div class="stat-row"><span class="stat-label">Achievements</span><span class="stat-val">${G.earnedAchievements.length}/${ACHIEVEMENTS.length}</span></div>
-      <div class="stat-row"><span class="stat-label">Prestige level</span><span class="stat-val">${G.prestigeLevel}</span></div>
-      <div class="stat-row"><span class="stat-label">Prestige bonus</span><span class="stat-val">+${G.prestigeLevel * 10}%</span></div>
-      <div class="stat-row"><span class="stat-label">Time played</span><span class="stat-val">${formatTime(G.timePlayed)}</span></div>
-    </div>
-  `;
-}
-
-// ==================== INFO TAB ====================
-function renderInfo() {
-  const container = document.getElementById('tab-content');
-  container.innerHTML = `
-    <div class="stat-group">
-      <div class="stat-group-title">ABOUT RADIATOR CLICKER</div>
-      <div style="font-family: var(--font-flavor); font-style: italic; color: var(--text-dim); font-size: 13px; line-height: 1.8; padding: 8px 0;">
-        <p>You found a radiator. It was cold. You clicked it. Now it is less cold.</p>
-        <br>
-        <p>Radiator Clicker is a deeply serious simulation of thermal infrastructure management. Click the radiator to generate heat. Purchase buildings to generate heat automatically. Buy upgrades to make everything generate more heat. Achieve achievements by generating heat in specific ways.</p>
-        <br>
-        <p>The <strong style="color:var(--text-gold)">Golden Radiator</strong> appears periodically. Click it quickly for a massive bonus and a ×7 production multiplier for 77 seconds.</p>
-        <br>
-        <p><strong style="color:var(--text-gold)">Prestige</strong> (Ascend the Heat) resets your progress but grants a permanent 10% production bonus per level. Requires 1 trillion total heat generated.</p>
-        <br>
-        <p>Buy in bulk using the ×1, ×10, ×100, or MAX buttons above the buildings list.</p>
-        <br>
-        <p style="color: var(--accent-dim)">The radiator will remember your sacrifice.</p>
+  const cpc = calcCPC();
+  document.getElementById('panel-content').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-title">Production</div>
+        <div class="stat-row"><span class="s-label">Heat/second</span><span class="s-val">${fmt(hps)}</span></div>
+        <div class="stat-row"><span class="s-label">Heat/click</span><span class="s-val">${fmt(cpc)}</span></div>
+        <div class="stat-row"><span class="s-label">Best HPS</span><span class="s-val">${fmt(G.highHPS)}</span></div>
+        <div class="stat-row"><span class="s-label">Golden mult</span><span class="s-val">×${G.goldenMult}${G.goldenMult>1?' ('+Math.ceil(G.goldenTimer)+'s)':''}</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-title">All Time</div>
+        <div class="stat-row"><span class="s-label">Total heat</span><span class="s-val">${fmt(G.totalHeat)}</span></div>
+        <div class="stat-row"><span class="s-label">Total clicks</span><span class="s-val">${G.clicks.toLocaleString()}</span></div>
+        <div class="stat-row"><span class="s-label">Upgrades</span><span class="s-val">${G.upgradesBought}</span></div>
+        <div class="stat-row"><span class="s-label">Golden clicks</span><span class="s-val">${G.goldenClicks}</span></div>
+      </div>
+      <div class="stat-card" style="grid-column:1/-1">
+        <div class="stat-card-title">Buildings</div>
+        ${BUILDINGS.map(b => `<div class="stat-row"><span class="s-label">${b.icon} ${b.name}</span><span class="s-val">${G.b[b.id]||0} · ${fmt(calcBuildingHPS(b)*(G.b[b.id]||0))}/s</span></div>`).join('')}
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-title">Progress</div>
+        <div class="stat-row"><span class="s-label">Achievements</span><span class="s-val">${G.achievements.length}/${ACHIEVEMENTS.length}</span></div>
+        <div class="stat-row"><span class="s-label">Prestige level</span><span class="s-val">${G.prestige}</span></div>
+        <div class="stat-row"><span class="s-label">Prestige bonus</span><span class="s-val">+${G.prestige*10}%</span></div>
+        <div class="stat-row"><span class="s-label">Time played</span><span class="s-val">${fmtTime(G.timePlayed)}</span></div>
       </div>
     </div>
-    <div class="stat-group">
-      <div class="stat-group-title">KEYBOARD SHORTCUTS</div>
-      <div class="stat-row"><span class="stat-label">S</span><span class="stat-val">Save game</span></div>
-      <div class="stat-row"><span class="stat-label">1 / 2 / 3 / 4</span><span class="stat-val">Switch tabs</span></div>
-      <div class="stat-row"><span class="stat-label">Q / W / E / R</span><span class="stat-val">Bulk ×1 / ×10 / ×100 / MAX</span></div>
-    </div>
   `;
 }
 
-// ==================== TABS ====================
+// ═══════════════════════════════════════════
+// UI
+// ═══════════════════════════════════════════
+
+function updateUI(hps) {
+  const cpc = calcCPC();
+  document.getElementById('heat-num').textContent = fmtFull(G.heat);
+  document.getElementById('hps-val').textContent = fmt(hps * G.goldenMult);
+  document.getElementById('hpc-val').textContent = fmt(cpc * G.goldenMult);
+  document.getElementById('h-total').textContent = fmt(G.totalHeat);
+  document.getElementById('h-hps').textContent = fmt(hps) + '/s';
+  document.getElementById('h-time').textContent = fmtTime(G.timePlayed);
+
+  document.getElementById('p-level').textContent = G.prestige;
+  document.getElementById('p-bonus').textContent = G.prestige * 10;
+
+  const pBtn = document.getElementById('prestige-btn');
+  if (G.totalHeat >= 1e12) pBtn.classList.add('show');
+  else pBtn.classList.remove('show');
+
+  // Hot glow on radiator
+  if (hps > 50) document.getElementById('radiator-svg').classList.add('hot');
+  else document.getElementById('radiator-svg').classList.remove('hot');
+
+  if (currentTab === 'upgrades') {
+    // just update badge without full re-render for perf
+    const affordable = UPGRADES.filter(u => !G.upgrades.includes(u.id) && u.req() && G.heat >= u.cost).length;
+    const badge = document.getElementById('badge-upg');
+    if (affordable > 0) { badge.style.display = 'flex'; badge.textContent = affordable; }
+    else badge.style.display = 'none';
+  }
+}
+
 function switchTab(tab) {
   currentTab = tab;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
-  if (tab === 'upgrades') renderUpgrades();
-  else if (tab === 'achievements') renderAchievements();
-  else if (tab === 'stats') renderStats();
-  else if (tab === 'info') renderInfo();
+  renderTab();
 }
 
-// ==================== TOOLTIP ====================
-function showTooltip(e, data) {
+function renderTab() {
+  if (currentTab === 'upgrades') renderUpgrades();
+  else if (currentTab === 'achievements') renderAchievements();
+  else if (currentTab === 'stats') renderStats();
+}
+
+// ═══════════════════════════════════════════
+// TOOLTIP
+// ═══════════════════════════════════════════
+
+function showTT(e, d) {
   const tt = document.getElementById('tooltip');
-  document.getElementById('tt-name').textContent = data.name;
-  document.getElementById('tt-cost').textContent = data.cost ? '🔥 ' + data.cost : '';
-  document.getElementById('tt-desc').textContent = data.desc || '';
-  document.getElementById('tt-effect').textContent = data.effect || '';
-  document.getElementById('tt-flavor').textContent = data.flavor || '';
-  document.getElementById('tt-flavor').style.display = data.flavor ? 'block' : 'none';
+  document.getElementById('tt-name').textContent = d.name;
+  document.getElementById('tt-cost').textContent = d.cost ? '🔥 ' + d.cost : '';
+  document.getElementById('tt-body').textContent = d.body || '';
+  document.getElementById('tt-effect').textContent = d.effect || '';
   tt.classList.add('show');
-  moveTooltip(e);
+  moveTT(e);
 }
-function hideTooltip() { document.getElementById('tooltip').classList.remove('show'); }
-function moveTooltip(e) {
+function hideTT() { document.getElementById('tooltip').classList.remove('show'); }
+function moveTT(e) {
   const tt = document.getElementById('tooltip');
-  const x = e.clientX + 12;
-  const y = e.clientY + 12;
-  const maxX = window.innerWidth - tt.offsetWidth - 10;
-  const maxY = window.innerHeight - tt.offsetHeight - 10;
-  tt.style.left = Math.min(x, maxX) + 'px';
-  tt.style.top = Math.min(y, maxY) + 'px';
+  const x = Math.min(e.clientX + 14, window.innerWidth - tt.offsetWidth - 8);
+  const y = Math.min(e.clientY + 14, window.innerHeight - tt.offsetHeight - 8);
+  tt.style.left = x + 'px';
+  tt.style.top = y + 'px';
 }
 
-// ==================== NOTIFICATIONS ====================
-function showNotif(msg, isAchievement = false) {
-  const container = document.getElementById('notifications');
-  const div = document.createElement('div');
-  div.className = 'notif' + (isAchievement ? ' achievement' : '');
-  div.textContent = msg;
-  container.appendChild(div);
-  setTimeout(() => div.remove(), 3200);
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+
+function toast(msg, type = '') {
+  const c = document.getElementById('toasts');
+  const d = document.createElement('div');
+  d.className = 'toast ' + type;
+  d.textContent = msg;
+  c.appendChild(d);
+  setTimeout(() => d.remove(), 3200);
 }
 
-// ==================== MILESTONE MESSAGES ====================
-const milestoneMessages = [
-  [1, "The radiator stirs. Something begins."],
-  [100, "A gentle warmth spreads through the room."],
-  [1000, "The pipes are singing now."],
-  [10000, "The neighbours have noticed. They are jealous."],
-  [100000, "Your home is the warmest on the street. By far."],
-  [1000000, "You are a thermal deity in embryo."],
-  [1e9, "The city glows orange on satellite imagery."],
-  [1e12, "Thermodynamics has written you a strongly-worded letter."],
-  [1e15, "Even the void feels slightly less cold."],
-  [1e18, "You have become the heat."],
-];
+// ═══════════════════════════════════════════
+// GOLDEN
+// ═══════════════════════════════════════════
 
-function updateMilestoneMsg(achievementName) {
-  const el = document.getElementById('milestone-msg');
-  el.textContent = 'Achievement unlocked: ' + achievementName + '!';
-  el.classList.add('flash');
-  setTimeout(() => {
-    el.classList.remove('flash');
-    updateMilestoneFromTotal();
-  }, 3000);
+let goldenVisible = false;
+function spawnGolden() {
+  if (goldenVisible) return;
+  const interval = Math.max(30, 150 - G.goldenClicks * 3);
+  goldenCooldown = interval;
+  goldenVisible = true;
+  const el = document.getElementById('golden');
+  el.style.left = (60 + Math.random() * (window.innerWidth - 160)) + 'px';
+  el.style.top = (80 + Math.random() * (window.innerHeight - 200)) + 'px';
+  el.style.display = 'block';
+  el.style.animation = 'none';
+  void el.offsetWidth;
+  el.style.animation = 'goldenBob 6s ease-in-out forwards';
+  setTimeout(() => { el.style.display = 'none'; goldenVisible = false; }, 6000);
 }
 
-function updateMilestoneFromTotal() {
-  const el = document.getElementById('milestone-msg');
-  let msg = "The radiator hums quietly in the corner.";
-  for (const [threshold, text] of milestoneMessages) {
-    if (G.totalHeat >= threshold) msg = text;
-  }
-  el.textContent = msg;
+function clickGolden() {
+  const el = document.getElementById('golden');
+  el.style.display = 'none';
+  goldenVisible = false;
+  G.goldenClicks++;
+  const bonus = Math.max(13, calcHPS() * 777);
+  G.heat += bonus;
+  G.totalHeat += bonus;
+  G.goldenMult = 7;
+  G.goldenTimer = 77;
+  toast('✨ Golden Radiator! +' + fmt(bonus) + ' heat & ×7 for 77s!', 'gold');
 }
 
-// Update ticker
-function updateTicker() {
-  const line = NEWS_LINES[Math.floor(Math.random() * NEWS_LINES.length)];
-  document.getElementById('ticker-text').textContent = NEWS_LINES.join('   ');
-}
+// ═══════════════════════════════════════════
+// PRESTIGE
+// ═══════════════════════════════════════════
 
-// ==================== PRESTIGE ====================
-document.getElementById('prestige-btn').addEventListener('click', () => {
+function prestige() {
   if (G.totalHeat < 1e12) return;
-  if (!confirm('Ascend the Heat? Your buildings and heat will reset, but you gain a permanent +10% bonus per prestige level. This cannot be undone.')) return;
-  G.prestigeLevel++;
+  if (!confirm('Ascend the Heat?\n\nAll buildings and upgrades reset.\nYou gain a permanent +10% bonus per prestige level.\n\nThis cannot be undone.')) return;
+  G.prestige++;
   G.heat = 0;
   G.totalHeat = 0;
-  G.buildings = { valve:0, pipe:0, thermostat:0, boiler:0, basement:0, district:0, geothermal:0, nuclear:0, solar:0, dyson:0, quantum:0, singularity:0 };
-  G.boughtUpgrades = [];
+  G.b = { valve:0, pipe:0, thermostat:0, boiler:0, furnace:0, district:0, geothermal:0, nuclear:0, solar:0, dyson:0, quantum:0 };
+  G.upgrades = [];
   G.upgradesBought = 0;
-  showNotif('✦ Ascended! Prestige level ' + G.prestigeLevel + ' — ×' + (1 + G.prestigeLevel * 0.1).toFixed(1) + ' all production!', true);
-  renderUpgrades();
+  toast('✦ Prestige ' + G.prestige + '! All production +' + (G.prestige*10) + '%', 'gold');
+  renderTab();
   renderBuildings();
-});
+}
 
-// ==================== SAVE / LOAD ====================
+// ═══════════════════════════════════════════
+// SAVE / LOAD
+// ═══════════════════════════════════════════
+
 function saveGame(silent = false) {
-  const data = JSON.stringify(G);
-  localStorage.setItem('radiator_clicker_save', data);
-  if (!silent) showNotif('💾 Game saved!');
-  lastSave = Date.now();
+  localStorage.setItem('rc2_save', JSON.stringify(G));
+  if (!silent) toast('💾 Saved!');
 }
 
 function loadGame() {
-  const data = localStorage.getItem('radiator_clicker_save');
-  if (data) {
-    try {
-      const saved = JSON.parse(data);
-      // Merge to preserve new fields
-      Object.assign(G, saved);
-      // Clamp
-      if (!G.buildings) G.buildings = {};
-      BUILDINGS.forEach(b => { if (G.buildings[b.id] === undefined) G.buildings[b.id] = 0; });
-      return true;
-    } catch(e) { console.error('Save load error:', e); }
-  }
-  return false;
+  try {
+    const d = localStorage.getItem('rc2_save');
+    if (!d) return;
+    const s = JSON.parse(d);
+    Object.assign(G, s);
+    // ensure all building keys exist
+    BUILDINGS.forEach(b => { if (G.b[b.id] == null) G.b[b.id] = 0; });
+    if (!Array.isArray(G.upgrades)) G.upgrades = [];
+    if (!Array.isArray(G.achievements)) G.achievements = [];
+  } catch(e) { console.error(e); }
 }
 
 function resetGame() {
   if (!confirm('Reset ALL progress? This cannot be undone.')) return;
-  localStorage.removeItem('radiator_clicker_save');
+  localStorage.removeItem('rc2_save');
   location.reload();
 }
 
-function exportSave() {
-  const data = btoa(JSON.stringify(G));
-  const blob = new Blob([data], {type: 'text/plain'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'radiator_save.txt';
-  a.click();
-  showNotif('📤 Save exported!');
-}
+// ═══════════════════════════════════════════
+// KEYBOARD
+// ═══════════════════════════════════════════
 
-// ==================== KEYBOARD ====================
-document.addEventListener('keydown', (e) => {
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-  if (e.key === 's' || e.key === 'S') saveGame();
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 's') saveGame();
   if (e.key === '1') switchTab('upgrades');
   if (e.key === '2') switchTab('achievements');
   if (e.key === '3') switchTab('stats');
-  if (e.key === '4') switchTab('info');
-  if (e.key === 'q' || e.key === 'Q') setBulk(1);
-  if (e.key === 'w' || e.key === 'W') setBulk(10);
-  if (e.key === 'e' || e.key === 'E') setBulk(100);
-  if (e.key === 'r' || e.key === 'R') setBulk(0);
+  if (e.key === 'q') setBulk(1);
+  if (e.key === 'w') setBulk(10);
+  if (e.key === 'e') setBulk(100);
+  if (e.key === 'r') setBulk(0);
 });
 
-// ==================== INIT ====================
-loadGame();
-updateTicker();
-renderBuildings();
-renderUpgrades();
-updateMilestoneFromTotal();
-setInterval(gameTick, 1000 / 60);
-setInterval(updateMilestoneFromTotal, 5000);
+// ═══════════════════════════════════════════
+// OFFLINE EARNINGS
+// ═══════════════════════════════════════════
 
-// Offline earnings
-const lastClose = localStorage.getItem('radiator_last_close');
+loadGame();
+
+const lastClose = localStorage.getItem('rc2_close');
 if (lastClose) {
-  const offline = Math.min((Date.now() - parseInt(lastClose)) / 1000, 3600);
+  const offlineSec = Math.min((Date.now() - parseInt(lastClose)) / 1000, 3600);
   const hps = calcHPS();
-  if (offline > 10 && hps > 0) {
-    const earned = hps * offline * 0.5;
+  if (offlineSec > 10 && hps > 0) {
+    const earned = hps * offlineSec * 0.5;
     G.heat += earned;
     G.totalHeat += earned;
-    showNotif(`🌙 While away: +${formatNumShort(earned)} heat (${formatTime(offline)} offline)`);
+    setTimeout(() => toast('🌙 Away for ' + fmtTime(offlineSec) + ' — +' + fmt(earned) + ' heat!'), 500);
   }
 }
+
 window.addEventListener('beforeunload', () => {
-  localStorage.setItem('radiator_last_close', Date.now().toString());
+  localStorage.setItem('rc2_close', Date.now());
   saveGame(true);
 });
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+
+renderBuildings();
+renderTab();
+goldenCooldown = 90;
 
 </script>
 </body>
