@@ -752,82 +752,82 @@ header {
 // ═══════════════════════════════════════════
 
 const BUILDINGS = [
-  { id:'valve',      name:'Bleed Valve',        icon:'🔩', baseCost:15,         baseHPS:0.1,    desc:'A tiny valve releasing just enough steam to count.', color:'#a07050' },
-  { id:'pipe',       name:'Copper Pipe',         icon:'🪈', baseCost:100,        baseHPS:0.5,    desc:'Basic copper plumbing through the wall.', color:'#c07840' },
-  { id:'thermostat', name:'Smart Thermostat',    icon:'🌡️', baseCost:500,        baseHPS:3,      desc:'Automated temperature control. It has opinions.', color:'#4a90bb' },
-  { id:'boiler',     name:'Gas Boiler',          icon:'🔥', baseCost:3000,       baseHPS:10,     desc:'A roaring gas boiler. Gerald is its name.', color:'#e06030' },
-  { id:'furnace',    name:'Furnace Room',        icon:'🏚️', baseCost:15000,      baseHPS:40,     desc:'A basement devoted entirely to warmth.', color:'#903020' },
-  { id:'district',   name:'District Heating',   icon:'🏙️', baseCost:100000,     baseHPS:200,    desc:'Heat the whole city from one central plant.', color:'#5060aa' },
-  { id:'geothermal', name:'Geothermal Tap',      icon:'🌋', baseCost:600000,     baseHPS:700,    desc:'Drill into the Earth\'s mantle. Steal heat.', color:'#aa4020' },
-  { id:'nuclear',    name:'Nuclear Reactor',     icon:'⚛️', baseCost:4000000,    baseHPS:3000,   desc:'Fission-powered. Technically legal here.', color:'#60aa30' },
-  { id:'solar',      name:'Orbital Solar Array', icon:'🛰️', baseCost:25000000,   baseHPS:10000,  desc:'Beam sunlight down from orbit. Neighbours annoyed.', color:'#ddaa20' },
-  { id:'dyson',      name:'Dyson Fragment',      icon:'⭐', baseCost:200000000,  baseHPS:50000,  desc:'A shard of a star-encasing megastructure.', color:'#ffcc44' },
-  { id:'quantum',    name:'Quantum Heat Pump',   icon:'🔮', baseCost:1500000000, baseHPS:200000, desc:'Harvests heat from parallel universes.', color:'#9060cc' },
+  { id:'valve',      name:'Valve',        icon:'🔩', baseCost:15,         baseHPS:0.1,    desc:'Idk', color:'#a07050' },
+  { id:'pipe',       name:'Copper Tart',         icon:'🪈', baseCost:100,        baseHPS:0.5,    desc:'Idk' },
+  { id:'thermostat', name:'Smart Mush',    icon:'🌡️', baseCost:500,        baseHPS:3,      desc:'Idk' },
+  { id:'boiler',     name:'Gas Boiler',          icon:'🔥', baseCost:3000,       baseHPS:10,     desc:'idk', color:'#e06030' },
+  { id:'furnace',    name:'Furnace Boom',        icon:'🏚️', baseCost:15000,      baseHPS:40,     desc:'idk', color:'#903020' },
+  { id:'district',   name:'District Hitting',   icon:'🏙️', baseCost:100000,     baseHPS:200,    desc:'Terrorist turkish', color:'#5060aa' },
+  { id:'geothermal', name:'Geothermal Tug',      icon:'🌋', baseCost:600000,     baseHPS:700,    desc:'Meow.', color:'#aa4020' },
+  { id:'nuclear',    name:'Nuclear Jerker',     icon:'⚛️', baseCost:4000000,    baseHPS:3000,   desc:'Idk', color:'#60aa30' },
+  { id:'solar',      name:'Orbital Stroke Array', icon:'🛰️', baseCost:25000000,   baseHPS:10000,  desc:'Nice.', color:'#ddaa20' },
+  { id:'dyson',      name:'Dyson Fragment',      icon:'⭐', baseCost:200000000,  baseHPS:50000,  desc:'Good.', color:'#ffcc44' },
+  { id:'quantum',    name:'Quantum Heat Pump',   icon:'🔮', baseCost:1500000000, baseHPS:200000, desc:'Holy cost.', color:'#9060cc' },
 ];
 
 const UPGRADES = [
   // ── Click upgrades
-  { id:'c1', name:'Thick Gloves',        icon:'🧤', cost:100,         type:'click', mult:2,   req:()=>true,                       effect:'Clicks produce ×2 heat.',         desc:'Heavy insulated gloves improve heat transfer per tap.' },
+  { id:'c1', name:'Chris Gloves',        icon:'🧤', cost:100,         type:'click', mult:2,   req:()=>true,                       effect:'Clicks produce ×2 heat.',         desc:'Heavy insulated gloves improve heat transfer per tap.' },
   { id:'c2', name:'Asbestos Mittens',    icon:'🔥', cost:500,         type:'click', mult:2,   req:()=>G.totalHeat>=200,           effect:'Clicks produce ×2 heat.',         desc:'Vintage. Illegal in most countries. Very warm.' },
-  { id:'c3', name:'Bionic Arm',          icon:'🦾', cost:5000,        type:'click', mult:2,   req:()=>G.totalHeat>=2000,          effect:'Clicks produce ×2 heat.',         desc:'Cybernetic enhancement for maximum tapping power.' },
-  { id:'c4', name:'Thermal Resonance',   icon:'〰️', cost:50000,       type:'click', mult:2,   req:()=>G.totalHeat>=20000,         effect:'Clicks produce ×2 heat.',         desc:'You and the radiator share a frequency now.' },
-  { id:'c5', name:'Kinetic Knuckles',    icon:'✊', cost:500000,      type:'click', mult:2,   req:()=>G.totalHeat>=200000,        effect:'Clicks produce ×2 heat.',         desc:'Experimental kinetic converters in your fists.' },
+  { id:'c3', name:'Bionic Third Leg',          icon:'🦾', cost:5000,        type:'click', mult:2,   req:()=>G.totalHeat>=2000,          effect:'Clicks produce ×2 heat.',         desc:'Cybernetic enhancement for maximum tapping power.' },
+  { id:'c4', name:'Thermal Nut',   icon:'〰️', cost:50000,       type:'click', mult:2,   req:()=>G.totalHeat>=20000,         effect:'Clicks produce ×2 heat.',         desc:'You and the radiator share a frequency now.' },
+  { id:'c5', name:'Kinetic Ni',    icon:'✊', cost:500000,      type:'click', mult:2,   req:()=>G.totalHeat>=200000,        effect:'Clicks produce ×2 heat.',         desc:'Experimental kinetic converters in your fists.' },
 
   // ── Valve upgrades
-  { id:'v1', name:'Teflon Valve',        icon:'⚙️', cost:200,         type:'building', target:'valve',      mult:2,  req:()=>G.b.valve>=1,      effect:'Bleed Valves ×2.',     desc:'PTFE coating reduces resistance, doubles output.' },
-  { id:'v2', name:'Thermostatic Heads',  icon:'🎛️', cost:1500,        type:'building', target:'valve',      mult:5,  req:()=>G.b.valve>=5,      effect:'Bleed Valves ×5.',     desc:'Self-regulating heads maximize flow automatically.' },
-  { id:'v3', name:'Pressure Protocol',   icon:'💨', cost:10000,       type:'building', target:'valve',      mult:2,  req:()=>G.b.valve>=25,     effect:'Bleed Valves ×2.',     desc:'Optimal depressurization cycles boost yield.' },
+  { id:'v1', name:'My name is jose mourinho',        icon:'⚙️', cost:200,         type:'building', target:'valve',      mult:2,  req:()=>G.b.valve>=1,      effect:'Bleed Valves ×2.',     desc:'PTFE coating reduces resistance, doubles output.' },
+  { id:'v2', name:'We perform under pressure',  icon:'🎛️', cost:1500,        type:'building', target:'valve',      mult:5,  req:()=>G.b.valve>=5,      effect:'Bleed Valves ×5.',     desc:'Self-regulating heads maximize flow automatically.' },
+  { id:'v3', name:'Pressure? What pressure',   icon:'💨', cost:10000,       type:'building', target:'valve',      mult:2,  req:()=>G.b.valve>=25,     effect:'Bleed Valves ×2.',     desc:'Optimal depressurization cycles boost yield.' },
 
   // ── Pipe upgrades
-  { id:'p1', name:'Lagged Pipes',        icon:'🪢', cost:1500,        type:'building', target:'pipe',       mult:2,  req:()=>G.b.pipe>=1,       effect:'Copper Pipes ×2.',     desc:'Foam insulation stops heat escaping.' },
-  { id:'p2', name:'Manifold Header',     icon:'🌿', cost:8000,        type:'building', target:'pipe',       mult:5,  req:()=>G.b.pipe>=5,       effect:'Copper Pipes ×5.',     desc:'Central manifold evenly distributes flow.' },
-  { id:'p3', name:'Superconductive',     icon:'💫', cost:50000,       type:'building', target:'pipe',       mult:2,  req:()=>G.b.pipe>=25,      effect:'Copper Pipes ×2.',     desc:'Fictional but effective alloy. Physics is noting this.' },
+  { id:'p1', name:'Leo pip',        icon:'🪢', cost:1500,        type:'building', target:'pipe',       mult:2,  req:()=>G.b.pipe>=1,       effect:'Copper Pipes ×2.',     desc:'Foam insulation stops heat escaping.' },
+  { id:'p2', name:'Joe gomezs nut',     icon:'🌿', cost:8000,        type:'building', target:'pipe',       mult:5,  req:()=>G.b.pipe>=5,       effect:'Copper Pipes ×5.',     desc:'Central manifold evenly distributes flow.' },
+  { id:'p3', name:'Superconductive condom',     icon:'💫', cost:50000,       type:'building', target:'pipe',       mult:2,  req:()=>G.b.pipe>=25,      effect:'Copper Pipes ×2.',     desc:'Fictional but effective alloy. Physics is noting this.' },
 
   // ── Thermostat upgrades
-  { id:'t1', name:'AI Thermostat',       icon:'🤖', cost:8000,        type:'building', target:'thermostat', mult:2,  req:()=>G.b.thermostat>=1, effect:'Thermostats ×2.',      desc:'Machine learning optimizes temperature profiles.' },
-  { id:'t2', name:'Predictive Heating',  icon:'🔮', cost:40000,       type:'building', target:'thermostat', mult:5,  req:()=>G.b.thermostat>=5, effect:'Thermostats ×5.',      desc:'Pre-warms rooms before you know you\'re cold.' },
+  { id:'t1', name:'Robot tugger',       icon:'🤖', cost:8000,        type:'building', target:'thermostat', mult:2,  req:()=>G.b.thermostat>=1, effect:'Thermostats ×2.',      desc:'Machine learning optimizes temperature profiles.' },
+  { id:'t2', name:'Idk thermostat',  icon:'🔮', cost:40000,       type:'building', target:'thermostat', mult:5,  req:()=>G.b.thermostat>=5, effect:'Thermostats ×5.',      desc:'Pre-warms rooms before you know you\'re cold.' },
 
   // ── Boiler upgrades
-  { id:'b1', name:'Annual Service',      icon:'🔧', cost:50000,       type:'building', target:'boiler',     mult:2,  req:()=>G.b.boiler>=1,     effect:'Boilers ×2.',          desc:'Full descale restores peak performance.' },
-  { id:'b2', name:'Combi Conversion',    icon:'🔄', cost:250000,      type:'building', target:'boiler',     mult:5,  req:()=>G.b.boiler>=5,     effect:'Boilers ×5.',          desc:'Eliminates tanks, routes all energy to radiators.' },
+  { id:'b1', name:'Anal Service',      icon:'🔧', cost:50000,       type:'building', target:'boiler',     mult:2,  req:()=>G.b.boiler>=1,     effect:'Boilers ×2.',          desc:'Full descale restores peak performance.' },
+  { id:'b2', name:'Conversion',    icon:'🔄', cost:250000,      type:'building', target:'boiler',     mult:5,  req:()=>G.b.boiler>=5,     effect:'Boilers ×5.',          desc:'Eliminates tanks, routes all energy to radiators.' },
 
   // ── Furnace upgrades
-  { id:'f1', name:'Coke Fuel',           icon:'⬛', cost:250000,      type:'building', target:'furnace',    mult:2,  req:()=>G.b.furnace>=1,    effect:'Furnace Rooms ×2.',    desc:'Carbon-dense industrial coke tripling temperatures.' },
-  { id:'f2', name:'Forced Draft',        icon:'🌬️', cost:1500000,     type:'building', target:'furnace',    mult:5,  req:()=>G.b.furnace>=5,    effect:'Furnace Rooms ×5.',    desc:'Powered air feed maximizes combustion rate.' },
+  { id:'f1', name:'Cocaine',           icon:'⬛', cost:250000,      type:'building', target:'furnace',    mult:2,  req:()=>G.b.furnace>=1,    effect:'Furnace Rooms ×2.',    desc:'Carbon-dense industrial coke tripling temperatures.' },
+  { id:'f2', name:'Drake',        icon:'🌬️', cost:1500000,     type:'building', target:'furnace',    mult:5,  req:()=>G.b.furnace>=5,    effect:'Furnace Rooms ×5.',    desc:'Powered air feed maximizes combustion rate.' },
 
   // ── District upgrades
-  { id:'d1', name:'Smart Grid',          icon:'🕸️', cost:1600000,     type:'building', target:'district',   mult:2,  req:()=>G.b.district>=1,   effect:'District Heating ×2.', desc:'City-wide thermal smart grid optimizes distribution.' },
-  { id:'d2', name:'Underground Mains',   icon:'🚇', cost:10000000,    type:'building', target:'district',   mult:5,  req:()=>G.b.district>=5,   effect:'District Heating ×5.', desc:'Insulated underground mains slash heat loss.' },
+  { id:'d1', name:'Smartie ',          icon:'🕸️', cost:1600000,     type:'building', target:'district',   mult:2,  req:()=>G.b.district>=1,   effect:'District Heating ×2.', desc:'City-wide thermal smart grid optimizes distribution.' },
+  { id:'d2', name:'Underground sex',   icon:'🚇', cost:10000000,    type:'building', target:'district',   mult:5,  req:()=>G.b.district>=5,   effect:'District Heating ×5.', desc:'Insulated underground mains slash heat loss.' },
 
   // ── Geothermal upgrades
-  { id:'g1', name:'Deep Bore',           icon:'⛏️', cost:10000000,    type:'building', target:'geothermal', mult:2,  req:()=>G.b.geothermal>=1, effect:'Geothermal Taps ×2.',  desc:'Extended drilling accesses superheated mantle.' },
+  { id:'g1', name:'Deep inside me',           icon:'⛏️', cost:10000000,    type:'building', target:'geothermal', mult:2,  req:()=>G.b.geothermal>=1, effect:'Geothermal Taps ×2.',  desc:'Extended drilling accesses superheated mantle.' },
 
   // ── Nuclear upgrades
-  { id:'n1', name:'Breeder Reactor',     icon:'☢️', cost:65000000,    type:'building', target:'nuclear',    mult:2,  req:()=>G.b.nuclear>=1,    effect:'Nuclear Reactors ×2.', desc:'Creates fuel while running. Economists furious.' },
+  { id:'n1', name:'Breeder reater',     icon:'☢️', cost:65000000,    type:'building', target:'nuclear',    mult:2,  req:()=>G.b.nuclear>=1,    effect:'Nuclear Reactors ×2.', desc:'Creates fuel while running. Economists furious.' },
 
   // ── Global upgrades
-  { id:'g_1', name:'Matte Black Paint',  icon:'🖌️', cost:1000000,    type:'global', mult:1.5, req:()=>G.totalHeat>=500000,    effect:'All production ×1.5.', desc:'Heat-emitting paint increases emissivity significantly.' },
-  { id:'g_2', name:'Thermal Mass',       icon:'🧱', cost:10000000,   type:'global', mult:1.5, req:()=>G.totalHeat>=5000000,   effect:'All production ×1.5.', desc:'Strategic thermal mass amplifies all heat sources.' },
-  { id:'g_3', name:'Heat Recuperation',  icon:'♻️', cost:100000000,  type:'global', mult:2,   req:()=>G.totalHeat>=50000000,  effect:'All production ×2.',   desc:'Whole-system heat recovery captures waste energy.' },
-  { id:'g_4', name:'Transcendence',      icon:'✨', cost:1000000000, type:'global', mult:3,   req:()=>G.totalHeat>=500000000, effect:'All production ×3.',   desc:'Your network has become so efficient, physics is impressed.' },
+  { id:'g_1', name:'BBC',  icon:'🖌️', cost:1000000,    type:'global', mult:1.5, req:()=>G.totalHeat>=500000,    effect:'All production ×1.5.', desc:'Heat-emitting paint increases emissivity significantly.' },
+  { id:'g_2', name:'Mates nut',       icon:'🧱', cost:10000000,   type:'global', mult:1.5, req:()=>G.totalHeat>=5000000,   effect:'All production ×1.5.', desc:'Strategic thermal mass amplifies all heat sources.' },
+  { id:'g_3', name:'What is respiration?',  icon:'♻️', cost:100000000,  type:'global', mult:2,   req:()=>G.totalHeat>=50000000,  effect:'All production ×2.',   desc:'Whole-system heat recovery captures waste energy.' },
+  { id:'g_4', name:'Rarefraction, compression bla bla bla',      icon:'✨', cost:1000000000, type:'global', mult:3,   req:()=>G.totalHeat>=500000000, effect:'All production ×3.',   desc:'Your network has become so efficient, physics is impressed.' },
 ];
 
 const ACHIEVEMENTS = [
-  { id:'a1',  icon:'🌡️', name:'First Warmth',       desc:'Generate 1 thermal unit.',        req:()=>G.totalHeat>=1 },
-  { id:'a2',  icon:'🍞', name:'Slightly Toasty',     desc:'Generate 100 thermal units.',     req:()=>G.totalHeat>=100 },
-  { id:'a3',  icon:'🏠', name:'Warm House',          desc:'Generate 1,000 thermal units.',   req:()=>G.totalHeat>=1000 },
-  { id:'a4',  icon:'🏙️', name:'Warm City',           desc:'Generate 100,000 thermal units.', req:()=>G.totalHeat>=100000 },
+  { id:'a1',  icon:'🌡️', name:'First Nut',       desc:'Generate 1 thermal unit.',        req:()=>G.totalHeat>=1 },
+  { id:'a2',  icon:'🍞', name:'Slightly Wet',     desc:'Generate 100 thermal units.',     req:()=>G.totalHeat>=100 },
+  { id:'a3',  icon:'🏠', name:'Warm dih',          desc:'Generate 1,000 thermal units.',   req:()=>G.totalHeat>=1000 },
+  { id:'a4',  icon:'🏙️', name:'Warm puh',           desc:'Generate 100,000 thermal units.', req:()=>G.totalHeat>=100000 },
   { id:'a5',  icon:'👑', name:'Boiler Room Boss',     desc:'Generate 1 million heat.',        req:()=>G.totalHeat>=1e6 },
-  { id:'a6',  icon:'☀️', name:'Stellar Furnace',      desc:'Generate 1 billion heat.',        req:()=>G.totalHeat>=1e9 },
+  { id:'a6',  icon:'☀️', name:'1 billion heat',      desc:'Generate 1 billion heat.',        req:()=>G.totalHeat>=1e9 },
   { id:'a7',  icon:'🌌', name:'Heat of the Universe', desc:'Generate 1 trillion heat.',       req:()=>G.totalHeat>=1e12 },
-  { id:'a8',  icon:'👆', name:'First Tap',            desc:'Click the radiator.',             req:()=>G.clicks>=1 },
-  { id:'a9',  icon:'💥', name:'100 Clicks',           desc:'Click 100 times.',                req:()=>G.clicks>=100 },
-  { id:'a10', icon:'🫀', name:'Obsessive',            desc:'Click 1,000 times.',              req:()=>G.clicks>=1000 },
-  { id:'a11', icon:'🏗️', name:'First Building',       desc:'Buy your first building.',        req:()=>totalB()>=1 },
-  { id:'a12', icon:'🏰', name:'Heat Empire',          desc:'Own 50 buildings.',               req:()=>totalB()>=50 },
-  { id:'a13', icon:'👷', name:'Infrastructure King',  desc:'Own 100 buildings.',              req:()=>totalB()>=100 },
+  { id:'a8',  icon:'👆', name:'First Tug',            desc:'Click the radiator.',             req:()=>G.clicks>=1 },
+  { id:'a9',  icon:'💥', name:'100 Tugs',           desc:'Click 100 times.',                req:()=>G.clicks>=100 },
+  { id:'a10', icon:'🫀', name:'Obsessive sard hex',            desc:'Click 1,000 times.',              req:()=>G.clicks>=1000 },
+  { id:'a11', icon:'🏗️', name:'First bih',       desc:'Buy your first building.',        req:()=>totalB()>=1 },
+  { id:'a12', icon:'🏰', name:'First yan',          desc:'Own 50 buildings.',               req:()=>totalB()>=50 },
+  { id:'a13', icon:'👷', name:'Daddy building',  desc:'Own 100 buildings.',              req:()=>totalB()>=100 },
   { id:'a14', icon:'⬆️', name:'First Upgrade',        desc:'Buy your first upgrade.',         req:()=>G.upgradesBought>=1 },
-  { id:'a15', icon:'🔬', name:'R&D Dept',             desc:'Buy 10 upgrades.',                req:()=>G.upgradesBought>=10 },
+  { id:'a15', icon:'🔬', name:'Miss and misses penalty (Gabriel and eze)',             desc:'Buy 10 upgrades.',                req:()=>G.upgradesBought>=10 },
   { id:'a16', icon:'✨', name:'Golden Radiator',       desc:'Click a Golden Radiator.',        req:()=>G.goldenClicks>=1 },
   { id:'a17', icon:'♦️', name:'Ascended',             desc:'Prestige once.',                  req:()=>G.prestige>=1 },
 ];
