@@ -1550,6 +1550,8 @@ let G = {
   bestCombo:    0,
   idleHeat:     0,
   idleTimer:    0,
+  clickBuffer:  0,   // click accumulator for throttled visuals
+  cachedCPC:    1,   // cached clicks-per-click, recomputed per tick
 };
 
 let currentTab      = 'upgrades';
@@ -1666,6 +1668,7 @@ function tick() {
   lastTick  = now;
 
   const hps  = calcHPS();
+  G.cachedCPC = calcCPC();   // cache per-click value once per frame
   const earn = hps * dt * G.goldenMult;
 
   G.heat      += earn;
@@ -1695,6 +1698,38 @@ function tick() {
   goldenCooldown -= dt;
   if (goldenCooldown <= 0) spawnGolden();
 
+  // Drain click visuals — at most 1 burst per frame regardless of click count
+  if (G.clickBuffer > 0) {
+    const cp    = G.cachedCPC * G.goldenMult;
+    const total = cp * G.clickBuffer;
+
+    // Heat shimmer
+    const shimmer = document.getElementById('heat-shimmer');
+    shimmer.style.opacity = '1';
+    setTimeout(() => { shimmer.style.opacity = '0'; }, 350);
+
+    // Float text showing accumulated heat from all buffered clicks
+    const size  = total > 1000 ? 'big' : total > 100 ? 'normal' : 'small';
+    const rad   = document.getElementById('rad-area');
+    const rRect = rad.getBoundingClientRect();
+    const cx    = rRect.left + rRect.width / 2 + (Math.random() - 0.5) * 60;
+    const cy    = rRect.top  + rRect.height / 2 + (Math.random() - 0.5) * 40;
+    spawnFloat('+' + fmt(total), cx - 16, cy - 10, size);
+
+    // Ripple
+    const ripple  = document.createElement('div');
+    ripple.className = 'ripple';
+    const sz      = Math.max(rRect.width, rRect.height);
+    ripple.style.width  = sz + 'px';
+    ripple.style.height = sz + 'px';
+    ripple.style.left   = (rRect.width  / 2 - sz / 2) + 'px';
+    ripple.style.top    = (rRect.height / 2 - sz / 2) + 'px';
+    rad.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+
+    G.clickBuffer = 0;
+  }
+
   updateUI(hps);
   checkAchievements();
   updateFlavour();
@@ -1710,31 +1745,12 @@ function clickRadiator(e) {
   const now = Date.now();
   lastClickForIdle = now;
 
-  const cp = calcCPC() * G.goldenMult;
+  // Fast path: just do the arithmetic, skip all DOM work
+  const cp = G.cachedCPC * G.goldenMult;
   G.heat      += cp;
   G.totalHeat += cp;
   G.clicks++;
-
-  // Heat shimmer
-  const shimmer = document.getElementById('heat-shimmer');
-  shimmer.style.opacity = '1';
-  setTimeout(() => { shimmer.style.opacity = '0'; }, 350);
-
-  // Float text
-  const size = cp > 1000 ? 'big' : cp > 100 ? 'normal' : 'small';
-  spawnFloat('+' + fmt(cp), e.clientX - 16, e.clientY - 10, size);
-
-  // Ripple
-  const ripple = document.createElement('div');
-  ripple.className = 'ripple';
-  const rect = document.getElementById('rad-area').getBoundingClientRect();
-  const size2 = Math.max(rect.width, rect.height);
-  ripple.style.width  = size2 + 'px';
-  ripple.style.height = size2 + 'px';
-  ripple.style.left   = (e.clientX - rect.left - size2/2) + 'px';
-  ripple.style.top    = (e.clientY - rect.top  - size2/2) + 'px';
-  document.getElementById('rad-area').appendChild(ripple);
-  setTimeout(() => ripple.remove(), 700);
+  G.clickBuffer++;
 }
 
 function spawnFloat(text, x, y, cls = 'normal') {
